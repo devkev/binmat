@@ -240,6 +240,13 @@ int main(int argc, char *argv[]) {
 	output_slow = binmat_alloc(n);
 	printf("binmat-test: done\n");
 
+	printf("binmat-test: memsetting binmats...\n");
+	memset(input, 0xF8, binmat_numbytes(n));
+	memset(trans, 0xF9, binmat_numbytes(n));
+	memset(output, 0xFA, binmat_numbytes(n));
+	memset(final, 0xFB, binmat_numbytes(n));
+	printf("binmat-test: done\n");
+
 	if (do_trad) {
 		printf("binmat-test: Allocating trads...\n");
 		tinput = malloc(sizeof(TRAD) * n * n);
@@ -249,16 +256,7 @@ int main(int argc, char *argv[]) {
 		ttrans = malloc(sizeof(TRAD) * n * n);
 		ttranscheck = malloc(sizeof(TRAD) * n * n);
 		printf("binmat-test: done\n");
-	}
 
-	printf("binmat-test: memsetting binmats...\n");
-	memset(input, 0xF8, binmat_numbytes(n));
-	memset(trans, 0xF9, binmat_numbytes(n));
-	memset(output, 0xFA, binmat_numbytes(n));
-	memset(final, 0xFB, binmat_numbytes(n));
-	printf("binmat-test: done\n");
-
-	if (do_trad) {
 		printf("binmat-test: memsetting trads...\n");
 		memset(tinput, 0xFC, sizeof(TRAD) * n * n);
 		memset(toutput, 0xFD, sizeof(TRAD) * n * n);
