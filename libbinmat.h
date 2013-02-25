@@ -3,8 +3,6 @@
 #define LIBBINMAT_H
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 
 #ifdef HAVE_UNSIGNED_LONG_LONG_INT

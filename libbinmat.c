@@ -1,7 +1,8 @@
 
 #include "libbinmat.h"
-#include <stdarg.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 const binmat_data_t one = (binmat_data_t)1U;
 const binmat_data_t zero = (binmat_data_t)0U;
