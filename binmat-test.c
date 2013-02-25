@@ -19,6 +19,7 @@
 #if !defined(TRAD)
 #define TRAD unsigned int
 //#define TRAD unsigned char
+#endif
 
 
 
@@ -152,8 +153,6 @@ void power_trad(TRAD *output, const TRAD *a, binmat_index_t n, unsigned int pow)
 	}
 	free(temp);
 }
-
-#endif
 
 
 /* This is basically reimplementing getopt(). */
