@@ -222,6 +222,11 @@ int main(int argc, char *argv[]) {
 	reps_trad = 1;
 #endif
 
+	//density = 0.2;
+	//density = 0.075;
+	density = 0.01;
+	//density = 0.095;
+
 
 	printf("binmat-test: %ux%u matrix, to %u power\n", n, n, p);
 	printf("binmat-test: binmat_chunkbytes = %lu, binmat_chunkbits = %lu\n", binmat_chunkbytes, binmat_chunkbits);
@@ -269,10 +274,6 @@ int main(int argc, char *argv[]) {
 	// setup input
 	srand(0);
 	//srand(10);
-	//density = 0.2;
-	//density = 0.075;
-	density = 0.01;
-	//density = 0.095;
 	for (row = 0; row < n; row++) {
 		for (col = 0; col < n; col++) {
 			binmat_setbit(input, n, row, col, ( ((double)rand()) / ((double)RAND_MAX) < density ));
