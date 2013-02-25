@@ -13,6 +13,7 @@
 #undef _BSD_SOURCE
 #undef BINMAT_TEST__BSD_SOURCE
 #endif
+#include <time.h>
 
 
 #if !defined(TRAD)
@@ -272,29 +273,19 @@ int main(int argc, char *argv[]) {
 
 
 
-	//n = 64;
-	//n = 2048;
-	//p = 6;
-	n = 20;
+	// Defaults
+	n = 151;
 	p = 3;
 
-	do_trad = 1;
+	warmups = 3;
+	reps = 10;
+	warmups_trad = 1;
+	reps_trad = 1;
 
-	//warmups = 3;
-	//reps = 10;
-	warmups = 1;
-	reps = 1;
-	if (do_trad) {
-		warmups_trad = 1;
-		reps_trad = 1;
-	}
-
-	//density = 0.2;
-	//density = 0.075;
 	density = 0.01;
-	//density = 0.095;
-	seed = 0;
-	//seed = 10;
+	seed = time(NULL);
+
+	do_trad = 1;
 
 
 	for (i = 1; i < argc; i++) {
