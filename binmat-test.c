@@ -17,8 +17,10 @@
 
 #if defined(BINMAT_TRAD)
 
+#if !defined(TRAD)
 #define TRAD unsigned int
 //#define TRAD unsigned char
+#endif
 
 
 
