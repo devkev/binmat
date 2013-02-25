@@ -365,7 +365,7 @@ void binmat_power(binmat_data_t *output, const binmat_data_t *a, const binmat_da
 	binmat_dprintf("binmat_power: Done.\n");
 }
 
-void power_slow(binmat_data_t *output, const binmat_data_t *a, binmat_index_t n, unsigned int pow) {
+void binmat_power_slow(binmat_data_t *output, const binmat_data_t *a, binmat_index_t n, unsigned int pow) {
 	unsigned int i;
 	//TYPE temp[N*n];
 	binmat_data_t *temp = binmat_alloc(n);

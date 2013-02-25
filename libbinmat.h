@@ -64,7 +64,7 @@ void binmat_multiply_slow(binmat_data_t *output, const binmat_data_t *a, const b
 void binmat_multiply(binmat_data_t *output, const binmat_data_t *a, const binmat_data_t *b, binmat_index_t n);
 
 void binmat_power(binmat_data_t *output, const binmat_data_t *a, const binmat_data_t *trans, binmat_index_t n, unsigned int pow);
-void power_slow(binmat_data_t *output, const binmat_data_t *a, binmat_index_t n, unsigned int pow);
+void binmat_power_slow(binmat_data_t *output, const binmat_data_t *a, binmat_index_t n, unsigned int pow);
 
 
 #endif
