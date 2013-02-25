@@ -161,7 +161,7 @@ int ul_arg(int argc, char *argv[], int *i, const char *arg, unsigned long *resul
 	char *endpt;
 
 	if (i == NULL || result == NULL) {
-		return 1;
+		return 0;
 	}
 
 	if (!strcmp(argv[*i], arg)) {
@@ -175,9 +175,9 @@ int ul_arg(int argc, char *argv[], int *i, const char *arg, unsigned long *resul
 			fprintf(stderr, "binmat-test: Error converting argument to %s\n", arg);
 			exit(1);
 		}
-		return 0;
+		return 1;
 	}
-	return 1;
+	return 0;
 }
 
 int ui_arg(int argc, char *argv[], int *i, const char *arg, unsigned int *result) {
@@ -185,11 +185,11 @@ int ui_arg(int argc, char *argv[], int *i, const char *arg, unsigned int *result
 	unsigned long r;
 
 	if (result == NULL) {
-		return 1;
+		return 0;
 	}
 
 	rc = ul_arg(argc, argv, i, arg, &r);
-	if (rc == 0) {
+	if (rc) {
 		*result = r;
 	}
 	return rc;
