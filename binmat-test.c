@@ -201,13 +201,6 @@ int main(int argc, char *argv[]) {
 	n = 20;
 	p = 3;
 
-	if (argc > 1) {
-		n = atoi(argv[1]);
-		if (argc > 2) {
-			p = atoi(argv[2]);
-		}
-	}
-
 	do_trad = 1;
 
 	//warmups = 3;
@@ -225,6 +218,14 @@ int main(int argc, char *argv[]) {
 	//density = 0.095;
 	seed = 0;
 	//seed = 10;
+
+
+	if (argc > 1) {
+		n = atoi(argv[1]);
+		if (argc > 2) {
+			p = atoi(argv[2]);
+		}
+	}
 
 
 	fprintf(stderr, "binmat-test: %ux%u matrix, to %u power\n", n, n, p);
