@@ -309,6 +309,11 @@ int main(int argc, char *argv[]) {
 		} else if (ui_arg(argc, argv, &i, "--warmups", &warmups)) {
 		} else if (ui_arg(argc, argv, &i, "-r", &reps)) {
 		} else if (ui_arg(argc, argv, &i, "--reps", &reps)) {
+		} else if (ui_arg(argc, argv, &i, "-tw", &warmups_trad)) {
+		} else if (ui_arg(argc, argv, &i, "--trad-warmup", &warmups_trad)) {
+		} else if (ui_arg(argc, argv, &i, "--trad-warmups", &warmups_trad)) {
+		} else if (ui_arg(argc, argv, &i, "-tr", &reps_trad)) {
+		} else if (ui_arg(argc, argv, &i, "--trad-reps", &reps_trad)) {
 		} else if (d_arg(argc, argv, &i, "-d", &density)) {
 		} else if (d_arg(argc, argv, &i, "--density", &density)) {
 		} else if (b_arg(argc, argv, &i, "-t", &do_trad, 0)) {
