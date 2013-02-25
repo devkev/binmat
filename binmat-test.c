@@ -307,6 +307,8 @@ int main(int argc, char *argv[]) {
 		} else if (ui_arg(argc, argv, &i, "-w", &warmups)) {
 		} else if (ui_arg(argc, argv, &i, "--warmup", &warmups)) {
 		} else if (ui_arg(argc, argv, &i, "--warmups", &warmups)) {
+		} else if (ui_arg(argc, argv, &i, "-r", &reps)) {
+		} else if (ui_arg(argc, argv, &i, "--reps", &reps)) {
 		} else if (d_arg(argc, argv, &i, "-d", &density)) {
 		} else if (d_arg(argc, argv, &i, "--density", &density)) {
 		} else if (b_arg(argc, argv, &i, "-t", &do_trad, 0)) {
