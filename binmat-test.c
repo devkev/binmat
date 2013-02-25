@@ -193,6 +193,9 @@ int main(int argc, char *argv[]) {
 
 	int do_trad;
 
+	int i;
+	char *endpt;
+
 
 
 	//n = 64;
@@ -220,10 +223,32 @@ int main(int argc, char *argv[]) {
 	//seed = 10;
 
 
-	if (argc > 1) {
-		n = atoi(argv[1]);
-		if (argc > 2) {
-			p = atoi(argv[2]);
+	for (i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-n")) {
+			if (i >= argc-1) {
+				fprintf(stderr, "binmat-test: Error: missing argument to -n\n");
+				exit(1);
+			}
+			i++;
+			n = strtoul(argv[i], &endpt, 0);
+			if (*endpt) {
+				fprintf(stderr, "binmat-test: Error converting argument to -n\n");
+				exit(1);
+			}
+		} else if (!strcmp(argv[i], "-p")) {
+			if (i >= argc-1) {
+				fprintf(stderr, "binmat-test: Error: missing argument to -p\n");
+				exit(1);
+			}
+			i++;
+			p = strtoul(argv[i], &endpt, 0);
+			if (*endpt) {
+				fprintf(stderr, "binmat-test: Error converting argument to -p\n");
+				exit(1);
+			}
+		} else {
+			fprintf(stderr, "binmat-test: Error: unknown arg \"%s\"\n", argv[i]);
+			exit(1);
 		}
 	}
 
