@@ -155,6 +155,46 @@ void power_trad(TRAD *output, const TRAD *a, binmat_index_t n, unsigned int pow)
 #endif
 
 
+/* This is basically reimplementing getopt(). */
+/* After going through this exercise I'll probably switch to getopt_long(). */
+int ul_arg(int argc, char *argv[], int *i, const char *arg, unsigned long *result) {
+	char *endpt;
+
+	if (i == NULL || result == NULL) {
+		return 1;
+	}
+
+	if (!strcmp(argv[*i], arg)) {
+		if (*i >= argc-1) {
+			fprintf(stderr, "binmat-test: Error: missing argument to %s\n", arg);
+			exit(1);
+		}
+		(*i)++;
+		*result = strtoul(argv[*i], &endpt, 0);
+		if (*endpt) {
+			fprintf(stderr, "binmat-test: Error converting argument to %s\n", arg);
+			exit(1);
+		}
+		return 0;
+	}
+	return 1;
+}
+
+int ui_arg(int argc, char *argv[], int *i, const char *arg, unsigned int *result) {
+	int rc;
+	unsigned long r;
+
+	if (result == NULL) {
+		return 1;
+	}
+
+	rc = ul_arg(argc, argv, i, arg, &r);
+	if (rc == 0) {
+		*result = r;
+	}
+	return rc;
+}
+
 
 int main(int argc, char *argv[]) {
 	binmat_index_t n;
@@ -194,7 +234,6 @@ int main(int argc, char *argv[]) {
 	int do_trad;
 
 	int i;
-	char *endpt;
 
 
 
@@ -224,28 +263,8 @@ int main(int argc, char *argv[]) {
 
 
 	for (i = 1; i < argc; i++) {
-		if (!strcmp(argv[i], "-n")) {
-			if (i >= argc-1) {
-				fprintf(stderr, "binmat-test: Error: missing argument to -n\n");
-				exit(1);
-			}
-			i++;
-			n = strtoul(argv[i], &endpt, 0);
-			if (*endpt) {
-				fprintf(stderr, "binmat-test: Error converting argument to -n\n");
-				exit(1);
-			}
-		} else if (!strcmp(argv[i], "-p")) {
-			if (i >= argc-1) {
-				fprintf(stderr, "binmat-test: Error: missing argument to -p\n");
-				exit(1);
-			}
-			i++;
-			p = strtoul(argv[i], &endpt, 0);
-			if (*endpt) {
-				fprintf(stderr, "binmat-test: Error converting argument to -p\n");
-				exit(1);
-			}
+		if (ui_arg(argc, argv, &i, "-n", &n)) {
+		} else if (ui_arg(argc, argv, &i, "-p", &p)) {
 		} else {
 			fprintf(stderr, "binmat-test: Error: unknown arg \"%s\"\n", argv[i]);
 			exit(1);
