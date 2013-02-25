@@ -196,6 +196,7 @@ int main(int argc, char *argv[]) {
 	unsigned int warmups_trad;
 	unsigned int reps_trad;
 #endif
+	unsigned int seed;
 
 
 
@@ -226,6 +227,8 @@ int main(int argc, char *argv[]) {
 	//density = 0.075;
 	density = 0.01;
 	//density = 0.095;
+	seed = 0;
+	//seed = 10;
 
 
 	printf("binmat-test: %ux%u matrix, to %u power\n", n, n, p);
@@ -272,8 +275,7 @@ int main(int argc, char *argv[]) {
 
 
 	// setup input
-	srand(0);
-	//srand(10);
+	srand(seed);
 	for (row = 0; row < n; row++) {
 		for (col = 0; col < n; col++) {
 			binmat_setbit(input, n, row, col, ( ((double)rand()) / ((double)RAND_MAX) < density ));
