@@ -184,8 +184,6 @@ int main(int argc, char *argv[]) {
 	unsigned int row;
 	unsigned int col;
 
-	binmat_binary_buf_t(buf);
-
 	struct timeval start;
 	struct timeval end;
 	struct timeval diff;
@@ -258,9 +256,6 @@ int main(int argc, char *argv[]) {
 	//printf("N*n*chunk = %d\n", N*n*chunk);
 	//printf("sizeof(input) = %d\n", sizeof(input));
 	//printf("sizeof(TRAD) = %d\n", sizeof(TRAD));
-
-
-	//printf("%d = %s\n", 32, type_to_binary(32, buf));
 
 
 	memset(input, 0xF8, binmat_numbytes(n));
