@@ -230,7 +230,7 @@ int main(int argc, char *argv[]) {
 #endif
 
 
-	printf("binmat-test: %lux%lu matrix, to %lu power\n", n, n, p);
+	printf("binmat-test: %ux%u matrix, to %u power\n", n, n, p);
 	printf("binmat-test: binmat_chunkbytes = %lu, binmat_chunkbits = %lu\n", binmat_chunkbytes, binmat_chunkbits);
 	binmat_dprintf("binmat-test: %lux%lu matrix, to %lu power\n", n, n, p);
 	binmat_dprintf("binmat-test: binmat_chunkbytes = %lu, binmat_chunkbits = %lu\n", binmat_chunkbytes, binmat_chunkbits);
@@ -323,12 +323,12 @@ int main(int argc, char *argv[]) {
 	printf("\n");
 
 
-	printf("finalchunkbits(%lu) = %lu\n", n, binmat_finalchunkbits(n));
-	printf("finalchunkmask(%lu) = 0x%x\n", n, binmat_finalchunkmask(n));
+	printf("finalchunkbits(%u) = %lu\n", n, binmat_finalchunkbits(n));
+	printf("finalchunkmask(%u) = 0x%"BINMAT_PRINTF_MODIFIER"x\n", n, binmat_finalchunkmask(n));
 	printf("finalchunkbits(%lu) = %lu\n", binmat_chunkbits, binmat_finalchunkbits(binmat_chunkbits));
-	printf("finalchunkmask(%lu) = 0x%x\n", binmat_chunkbits, binmat_finalchunkmask(binmat_chunkbits));
+	printf("finalchunkmask(%lu) = 0x%"BINMAT_PRINTF_MODIFIER"x\n", binmat_chunkbits, binmat_finalchunkmask(binmat_chunkbits));
 	printf("finalchunkbits(%lu) = %lu\n", 5*binmat_chunkbits, binmat_finalchunkbits(5*binmat_chunkbits));
-	printf("finalchunkmask(%lu) = 0x%x\n", 5*binmat_chunkbits, binmat_finalchunkmask(5*binmat_chunkbits));
+	printf("finalchunkmask(%lu) = 0x%"BINMAT_PRINTF_MODIFIER"x\n", 5*binmat_chunkbits, binmat_finalchunkmask(5*binmat_chunkbits));
 	printf("\n");
 
 	// check trans

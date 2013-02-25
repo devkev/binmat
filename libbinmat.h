@@ -10,8 +10,10 @@ typedef BINMAT_DATA_TYPE binmat_data_t;
 #else
 #ifdef HAVE_UNSIGNED_LONG_LONG_INT
 typedef unsigned long long binmat_data_t;
+#define BINMAT_PRINTF_MODIFIER "ll"
 #else
 typedef unsigned long binmat_data_t;
+#define BINMAT_PRINTF_MODIFIER "l"
 #endif
 /*typedef unsigned char binmat_data_t;*/
 /*typedef unsigned int binmat_data_t;*/
