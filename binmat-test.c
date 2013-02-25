@@ -299,8 +299,11 @@ int main(int argc, char *argv[]) {
 
 	for (i = 1; i < argc; i++) {
 		if (ui_arg(argc, argv, &i, "-n", &n)) {
+		} else if (ui_arg(argc, argv, &i, "--size", &n)) {
 		} else if (ui_arg(argc, argv, &i, "-p", &p)) {
+		} else if (ui_arg(argc, argv, &i, "--power", &p)) {
 		} else if (d_arg(argc, argv, &i, "-d", &density)) {
+		} else if (d_arg(argc, argv, &i, "--density", &density)) {
 		} else if (b_arg(argc, argv, &i, "-t", &do_trad, 0)) {
 		} else if (b_arg(argc, argv, &i, "--trad", &do_trad, 0)) {
 		} else if (b_arg(argc, argv, &i, "-T", &do_trad, 1)) {
