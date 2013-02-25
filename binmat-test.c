@@ -178,8 +178,6 @@ int main(int argc, char *argv[]) {
 	TRAD *ttranscheck;
 #endif
 
-	int *silly;
-
 	unsigned int p;
 	unsigned int i, j, k;
 	unsigned int offset1, offset2;
@@ -284,12 +282,6 @@ int main(int argc, char *argv[]) {
 
 
 	// setup input
-	//srand(0);
-	//silly = input;
-	//for (i = 0; i < N*N/(sizeof(int)*8); i++, silly++) {
-	//	*silly = (unsigned int) ( (rand() - rand()) / 16 * 16 );
-	//}
-
 	srand(0);
 	//srand(10);
 	//density = 0.2;
