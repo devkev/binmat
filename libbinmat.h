@@ -25,7 +25,6 @@ typedef unsigned char binmat_bool_t;
 
 #define binmat_chunkbytes (sizeof(binmat_data_t))
 #define binmat_chunkbits (binmat_chunkbytes*8)
-/*#define binmat_numchunks(n) ((n)/binmat_chunkbits)*/
 #define binmat_numchunks(n) ( ((n)%binmat_chunkbits==0) ? (n)/binmat_chunkbits : (n)/binmat_chunkbits + 1 )
 #define binmat_numbytes(n) ((n) * binmat_numchunks(n) * binmat_chunkbytes)
 #define binmat_finalchunkbits(n) ( ((n)%binmat_chunkbits==0) ? binmat_chunkbits : (n)%binmat_chunkbits )
@@ -43,19 +42,14 @@ int binmat_dprintf(const char *format, ...);
 
 
 binmat_data_t *binmat_alloc(binmat_index_t n);
-
 void binmat_free(binmat_data_t *m);
 
 binmat_bool_t binmat_getbit(const binmat_data_t *m, binmat_index_t n, binmat_index_t row, binmat_index_t col);
-
 void binmat_setbit(binmat_data_t *m, binmat_index_t n, binmat_index_t row, binmat_index_t col, binmat_bool_t value);
 
 char *binmat_format_chunk(binmat_data_t x, char *buf);
-
 void binmat_print_matrix_slow(FILE *f, const binmat_data_t *m, binmat_index_t n);
-
 void binmat_print_matrix_fast(FILE *f, const binmat_data_t *m, binmat_index_t n);
-
 void binmat_print_matrix_hex(FILE *f, const binmat_data_t *m, binmat_index_t n);
 
 void binmat_transpose(binmat_data_t *output, const binmat_data_t *input, binmat_index_t n);
@@ -70,7 +64,6 @@ void binmat_multiply_slow(binmat_data_t *output, const binmat_data_t *a, const b
 void binmat_multiply(binmat_data_t *output, const binmat_data_t *a, const binmat_data_t *b, binmat_index_t n);
 
 void binmat_power(binmat_data_t *output, const binmat_data_t *a, const binmat_data_t *trans, binmat_index_t n, unsigned int pow);
-
 void power_slow(binmat_data_t *output, const binmat_data_t *a, binmat_index_t n, unsigned int pow);
 
 
