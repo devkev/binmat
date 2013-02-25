@@ -5,6 +5,9 @@
 #include <stdio.h>
 
 
+#if defined(BINMAT_DATA_TYPE)
+typedef BINMAT_DATA_TYPE binmat_data_t;
+#else
 #ifdef HAVE_UNSIGNED_LONG_LONG_INT
 typedef unsigned long long binmat_data_t;
 #else
@@ -12,6 +15,7 @@ typedef unsigned long binmat_data_t;
 #endif
 /*typedef unsigned char binmat_data_t;*/
 /*typedef unsigned int binmat_data_t;*/
+#endif
 
 extern const binmat_data_t one;
 extern const binmat_data_t zero;
