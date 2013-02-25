@@ -218,6 +218,18 @@ int d_arg(int argc, char *argv[], int *i, const char *arg, double *result) {
 	return 0;
 }
 
+int b_arg(int argc, char *argv[], int *i, const char *arg, int *result, int invert) {
+	if (i == NULL || result == NULL) {
+		return 0;
+	}
+
+	if (!strcmp(argv[*i], arg)) {
+		*result = ! invert;
+		return 1;
+	}
+	return 0;
+}
+
 
 int main(int argc, char *argv[]) {
 	binmat_index_t n;
@@ -289,6 +301,10 @@ int main(int argc, char *argv[]) {
 		if (ui_arg(argc, argv, &i, "-n", &n)) {
 		} else if (ui_arg(argc, argv, &i, "-p", &p)) {
 		} else if (d_arg(argc, argv, &i, "-d", &density)) {
+		} else if (b_arg(argc, argv, &i, "-t", &do_trad, 0)) {
+		} else if (b_arg(argc, argv, &i, "--trad", &do_trad, 0)) {
+		} else if (b_arg(argc, argv, &i, "-T", &do_trad, 1)) {
+		} else if (b_arg(argc, argv, &i, "--no-trad", &do_trad, 1)) {
 		} else {
 			fprintf(stderr, "binmat-test: Error: unknown arg \"%s\"\n", argv[i]);
 			exit(1);
@@ -299,6 +315,7 @@ int main(int argc, char *argv[]) {
 	fprintf(stderr, "binmat-test: %ux%u matrix, to %u power\n", n, n, p);
 	fprintf(stderr, "binmat-test: binmat_chunkbytes = %lu, binmat_chunkbits = %lu\n", binmat_chunkbytes, binmat_chunkbits);
 	fprintf(stderr, "binmat-test: density %lf\n", density);
+	fprintf(stderr, "binmat-test: do_trad? %s\n", do_trad ? "yes" : "no");
 
 
 	fprintf(stderr, "binmat-test: Allocating binmats...\n");
