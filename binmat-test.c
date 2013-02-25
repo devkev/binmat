@@ -298,28 +298,37 @@ int main(int argc, char *argv[]) {
 
 
 	for (i = 1; i < argc; i++) {
-		if (ui_arg(argc, argv, &i, "-n", &n)) {
+		       if (ui_arg(argc, argv, &i, "-n", &n)) {
 		} else if (ui_arg(argc, argv, &i, "--size", &n)) {
+
 		} else if (ui_arg(argc, argv, &i, "-p", &p)) {
 		} else if (ui_arg(argc, argv, &i, "--power", &p)) {
+
 		} else if (ui_arg(argc, argv, &i, "-s", &seed)) {
 		} else if (ui_arg(argc, argv, &i, "--seed", &seed)) {
+
 		} else if (ui_arg(argc, argv, &i, "-w", &warmups)) {
 		} else if (ui_arg(argc, argv, &i, "--warmup", &warmups)) {
 		} else if (ui_arg(argc, argv, &i, "--warmups", &warmups)) {
+
 		} else if (ui_arg(argc, argv, &i, "-r", &reps)) {
 		} else if (ui_arg(argc, argv, &i, "--reps", &reps)) {
+
 		} else if (ui_arg(argc, argv, &i, "-tw", &warmups_trad)) {
 		} else if (ui_arg(argc, argv, &i, "--trad-warmup", &warmups_trad)) {
 		} else if (ui_arg(argc, argv, &i, "--trad-warmups", &warmups_trad)) {
+
 		} else if (ui_arg(argc, argv, &i, "-tr", &reps_trad)) {
 		} else if (ui_arg(argc, argv, &i, "--trad-reps", &reps_trad)) {
+
 		} else if (d_arg(argc, argv, &i, "-d", &density)) {
 		} else if (d_arg(argc, argv, &i, "--density", &density)) {
+
 		} else if (b_arg(argc, argv, &i, "-t", &do_trad, 0)) {
 		} else if (b_arg(argc, argv, &i, "--trad", &do_trad, 0)) {
 		} else if (b_arg(argc, argv, &i, "-T", &do_trad, 1)) {
 		} else if (b_arg(argc, argv, &i, "--no-trad", &do_trad, 1)) {
+
 		} else {
 			fprintf(stderr, "binmat-test: Error: unknown arg \"%s\"\n", argv[i]);
 			exit(1);
