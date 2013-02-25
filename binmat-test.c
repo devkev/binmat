@@ -15,7 +15,7 @@
 #endif
 
 
-#if defined(DO_TRAD)
+#if defined(BINMAT_TRAD)
 
 #define TRAD unsigned int
 //#define TRAD unsigned char
@@ -167,7 +167,7 @@ int main(int argc, char *argv[]) {
 	binmat_data_t *transcheck;
 	binmat_data_t *output_slow;
 
-#if defined(DO_TRAD)
+#if defined(BINMAT_TRAD)
 	TRAD *tinput;
 	TRAD *toutput;
 	TRAD *tfinal;
@@ -197,7 +197,7 @@ int main(int argc, char *argv[]) {
 	unsigned int rep;
 	unsigned int warmups;
 	unsigned int reps;
-#if defined(DO_TRAD)
+#if defined(BINMAT_TRAD)
 	unsigned int warmups_trad;
 	unsigned int reps_trad;
 #endif
@@ -222,7 +222,7 @@ int main(int argc, char *argv[]) {
 	//reps = 10;
 	warmups = 1;
 	reps = 1;
-#if defined(DO_TRAD)
+#if defined(BINMAT_TRAD)
 	warmups_trad = 1;
 	reps_trad = 1;
 #endif
@@ -241,7 +241,7 @@ int main(int argc, char *argv[]) {
 	transcheck = binmat_alloc(n);
 	output_slow = binmat_alloc(n);
 
-#if defined(DO_TRAD)
+#if defined(BINMAT_TRAD)
 	tinput = malloc(sizeof(TRAD) * n * n);
 	toutput = malloc(sizeof(TRAD) * n * n);
 	tfinal = malloc(sizeof(TRAD) * n * n);
@@ -271,7 +271,7 @@ int main(int argc, char *argv[]) {
 	memset(output, 0xFA, binmat_numbytes(n));
 	memset(final, 0xFB, binmat_numbytes(n));
 
-#if defined(DO_TRAD)
+#if defined(BINMAT_TRAD)
 	memset(tinput, 0xFC, sizeof(TRAD) * n * n);
 	memset(toutput, 0xFD, sizeof(TRAD) * n * n);
 	memset(tfinal, 0xFE, sizeof(TRAD) * n * n);
@@ -367,7 +367,7 @@ int main(int argc, char *argv[]) {
 
 
 
-#if defined(DO_TRAD)
+#if defined(BINMAT_TRAD)
 	init_trad(tinput, input, n);
 
 	printf("Trad Input: %s\n", are_identical_trad(input, tinput, n) ? "Identical" : "DIFFERENT!");
@@ -436,7 +436,7 @@ int main(int argc, char *argv[]) {
 #endif
 
 	printf("     Power (%u): Time for %u reps: %ld.%06lds\n", p, reps, diff.tv_sec, diff.tv_usec);
-#if defined(DO_TRAD)
+#if defined(BINMAT_TRAD)
 	printf("Trad power (%u): Time for %u reps: %ld.%06lds\n", p, reps_trad, diff_trad.tv_sec, diff_trad.tv_usec);
 #endif
 
@@ -449,7 +449,7 @@ int main(int argc, char *argv[]) {
 	binmat_free(transcheck);
 	binmat_free(output_slow);
 
-#if defined(DO_TRAD)
+#if defined(BINMAT_TRAD)
 	free(tinput);
 	free(toutput);
 	free(tfinal);
