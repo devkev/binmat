@@ -227,33 +227,41 @@ int main(int argc, char *argv[]) {
 	printf("binmat-test: binmat_chunkbytes = %lu, binmat_chunkbits = %lu\n", binmat_chunkbytes, binmat_chunkbits);
 
 
+	printf("binmat-test: Allocating binmats...\n");
 	input = binmat_alloc(n);
 	trans = binmat_alloc(n);
 	output = binmat_alloc(n);
 	final = binmat_alloc(n);
 	transcheck = binmat_alloc(n);
 	output_slow = binmat_alloc(n);
+	printf("binmat-test: done\n");
 
 #if defined(BINMAT_TRAD)
+	printf("binmat-test: Allocating trads...\n");
 	tinput = malloc(sizeof(TRAD) * n * n);
 	toutput = malloc(sizeof(TRAD) * n * n);
 	tfinal = malloc(sizeof(TRAD) * n * n);
 	ttemp = malloc(sizeof(TRAD) * n * n);
 	ttrans = malloc(sizeof(TRAD) * n * n);
 	ttranscheck = malloc(sizeof(TRAD) * n * n);
+	printf("binmat-test: done\n");
 #endif
 
+	printf("binmat-test: memsetting binmats...\n");
 	memset(input, 0xF8, binmat_numbytes(n));
 	memset(trans, 0xF9, binmat_numbytes(n));
 	memset(output, 0xFA, binmat_numbytes(n));
 	memset(final, 0xFB, binmat_numbytes(n));
+	printf("binmat-test: done\n");
 
 #if defined(BINMAT_TRAD)
+	printf("binmat-test: memsetting trads...\n");
 	memset(tinput, 0xFC, sizeof(TRAD) * n * n);
 	memset(toutput, 0xFD, sizeof(TRAD) * n * n);
 	memset(tfinal, 0xFE, sizeof(TRAD) * n * n);
 	memset(ttrans, 0xF0, sizeof(TRAD) * n * n);
 	memset(ttranscheck, 0xF1, sizeof(TRAD) * n * n);
+	printf("binmat-test: done\n");
 #endif
 
 
@@ -411,18 +419,22 @@ int main(int argc, char *argv[]) {
 
 
 
+	printf("binmat-test: freeing binmats...\n");
 	binmat_free(input);
 	binmat_free(trans);
 	binmat_free(output);
 	binmat_free(final);
 	binmat_free(transcheck);
 	binmat_free(output_slow);
+	printf("binmat-test: done\n");
 
 #if defined(BINMAT_TRAD)
+	printf("binmat-test: freeing trads...\n");
 	free(tinput);
 	free(toutput);
 	free(tfinal);
 	free(ttemp);
+	printf("binmat-test: done\n");
 #endif
 
 	return 0;
