@@ -195,6 +195,29 @@ int ui_arg(int argc, char *argv[], int *i, const char *arg, unsigned int *result
 	return rc;
 }
 
+int d_arg(int argc, char *argv[], int *i, const char *arg, double *result) {
+	char *endpt;
+
+	if (i == NULL || result == NULL) {
+		return 0;
+	}
+
+	if (!strcmp(argv[*i], arg)) {
+		if (*i >= argc-1) {
+			fprintf(stderr, "binmat-test: Error: missing argument to %s\n", arg);
+			exit(1);
+		}
+		(*i)++;
+		*result = strtod(argv[*i], &endpt);
+		if (*endpt) {
+			fprintf(stderr, "binmat-test: Error converting argument to %s\n", arg);
+			exit(1);
+		}
+		return 1;
+	}
+	return 0;
+}
+
 
 int main(int argc, char *argv[]) {
 	binmat_index_t n;
@@ -265,6 +288,7 @@ int main(int argc, char *argv[]) {
 	for (i = 1; i < argc; i++) {
 		if (ui_arg(argc, argv, &i, "-n", &n)) {
 		} else if (ui_arg(argc, argv, &i, "-p", &p)) {
+		} else if (d_arg(argc, argv, &i, "-d", &density)) {
 		} else {
 			fprintf(stderr, "binmat-test: Error: unknown arg \"%s\"\n", argv[i]);
 			exit(1);
@@ -274,6 +298,7 @@ int main(int argc, char *argv[]) {
 
 	fprintf(stderr, "binmat-test: %ux%u matrix, to %u power\n", n, n, p);
 	fprintf(stderr, "binmat-test: binmat_chunkbytes = %lu, binmat_chunkbits = %lu\n", binmat_chunkbytes, binmat_chunkbits);
+	fprintf(stderr, "binmat-test: density %lf\n", density);
 
 
 	fprintf(stderr, "binmat-test: Allocating binmats...\n");
