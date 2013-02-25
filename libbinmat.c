@@ -7,7 +7,7 @@
 const binmat_data_t one = (binmat_data_t)1U;
 const binmat_data_t zero = (binmat_data_t)0U;
 
-#if defined(DO_DEBUG)
+#if defined(BINMAT_DEBUG)
 //static int binmat_do_debug = 1;
 //static int binmat_do_debug = 0;
 //static int binmat_do_debug = (getenv("BINMAT_DEBUG") != NULL);

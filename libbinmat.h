@@ -31,7 +31,7 @@ typedef unsigned char binmat_bool_t;
 #define binmat_binary_buf_t(x) binmat_binary_bufn_t(x,1)
 
 
-#if defined(DO_DEBUG)
+#if defined(BINMAT_DEBUG)
 int binmat_dprintf(const char *format, ...);
 #else
 #define binmat_dprintf(...)
