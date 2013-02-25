@@ -198,6 +198,8 @@ int main(int argc, char *argv[]) {
 #endif
 	unsigned int seed;
 
+	int do_trad;
+
 
 
 	//n = 64;
@@ -213,14 +215,17 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	do_trad = 1;
 
 	//warmups = 3;
 	//reps = 10;
 	warmups = 1;
 	reps = 1;
 #if defined(BINMAT_TRAD)
-	warmups_trad = 1;
-	reps_trad = 1;
+	if (do_trad) {
+		warmups_trad = 1;
+		reps_trad = 1;
+	}
 #endif
 
 	//density = 0.2;
@@ -245,14 +250,16 @@ int main(int argc, char *argv[]) {
 	printf("binmat-test: done\n");
 
 #if defined(BINMAT_TRAD)
-	printf("binmat-test: Allocating trads...\n");
-	tinput = malloc(sizeof(TRAD) * n * n);
-	toutput = malloc(sizeof(TRAD) * n * n);
-	tfinal = malloc(sizeof(TRAD) * n * n);
-	ttemp = malloc(sizeof(TRAD) * n * n);
-	ttrans = malloc(sizeof(TRAD) * n * n);
-	ttranscheck = malloc(sizeof(TRAD) * n * n);
-	printf("binmat-test: done\n");
+	if (do_trad) {
+		printf("binmat-test: Allocating trads...\n");
+		tinput = malloc(sizeof(TRAD) * n * n);
+		toutput = malloc(sizeof(TRAD) * n * n);
+		tfinal = malloc(sizeof(TRAD) * n * n);
+		ttemp = malloc(sizeof(TRAD) * n * n);
+		ttrans = malloc(sizeof(TRAD) * n * n);
+		ttranscheck = malloc(sizeof(TRAD) * n * n);
+		printf("binmat-test: done\n");
+	}
 #endif
 
 	printf("binmat-test: memsetting binmats...\n");
@@ -263,13 +270,15 @@ int main(int argc, char *argv[]) {
 	printf("binmat-test: done\n");
 
 #if defined(BINMAT_TRAD)
-	printf("binmat-test: memsetting trads...\n");
-	memset(tinput, 0xFC, sizeof(TRAD) * n * n);
-	memset(toutput, 0xFD, sizeof(TRAD) * n * n);
-	memset(tfinal, 0xFE, sizeof(TRAD) * n * n);
-	memset(ttrans, 0xF0, sizeof(TRAD) * n * n);
-	memset(ttranscheck, 0xF1, sizeof(TRAD) * n * n);
-	printf("binmat-test: done\n");
+	if (do_trad) {
+		printf("binmat-test: memsetting trads...\n");
+		memset(tinput, 0xFC, sizeof(TRAD) * n * n);
+		memset(toutput, 0xFD, sizeof(TRAD) * n * n);
+		memset(tfinal, 0xFE, sizeof(TRAD) * n * n);
+		memset(ttrans, 0xF0, sizeof(TRAD) * n * n);
+		memset(ttranscheck, 0xF1, sizeof(TRAD) * n * n);
+		printf("binmat-test: done\n");
+	}
 #endif
 
 
@@ -348,76 +357,80 @@ int main(int argc, char *argv[]) {
 
 
 #if defined(BINMAT_TRAD)
-	init_trad(tinput, input, n);
+	if (do_trad) {
+		init_trad(tinput, input, n);
 
-	printf("Trad Input: %s\n", are_identical_trad(input, tinput, n) ? "Identical" : "DIFFERENT!");
-	//print_trad_binary(tinput, n);
-	printf("\n");
+		printf("Trad Input: %s\n", are_identical_trad(input, tinput, n) ? "Identical" : "DIFFERENT!");
+		//print_trad_binary(tinput, n);
+		printf("\n");
 
-	transpose_trad(ttrans, tinput, n);
+		transpose_trad(ttrans, tinput, n);
 
-	printf("Trad Trans: %s\n", are_identical_trad(trans, ttrans, n) ? "Identical" : "DIFFERENT!");
-	//print_trad_binary(ttrans, n);
-	printf("\n");
-	printf("\n");
-	//print_trad(ttrans, n);
-	printf("\n");
+		printf("Trad Trans: %s\n", are_identical_trad(trans, ttrans, n) ? "Identical" : "DIFFERENT!");
+		//print_trad_binary(ttrans, n);
+		printf("\n");
+		printf("\n");
+		//print_trad(ttrans, n);
+		printf("\n");
 
-	transpose_trad(ttranscheck, ttrans, n);
-	printf("Done\n");
+		transpose_trad(ttranscheck, ttrans, n);
+		printf("Done\n");
 
-	printf("Trad Transcheck: %s %s\n", are_identical_trad(transcheck, ttranscheck, n) ? "Identical" : "DIFFERENT!", are_identical_trad_pure(tinput, ttranscheck, n) ? "Identical" : "DIFFERENT!");
-	//print_trad_binary(ttranscheck, n);
-	printf("\n");
-	printf("\n");
-	//print_trad(ttranscheck, n);
-	printf("\n");
+		printf("Trad Transcheck: %s %s\n", are_identical_trad(transcheck, ttranscheck, n) ? "Identical" : "DIFFERENT!", are_identical_trad_pure(tinput, ttranscheck, n) ? "Identical" : "DIFFERENT!");
+		//print_trad_binary(ttranscheck, n);
+		printf("\n");
+		printf("\n");
+		//print_trad(ttranscheck, n);
+		printf("\n");
 
-	multiply_trad(toutput, tinput, tinput, n);
+		multiply_trad(toutput, tinput, tinput, n);
 
-	printf("Trad Multiply: %s\n", are_identical_trad(output, toutput, n) ? "Identical" : "DIFFERENT!");
-	//print_trad_binary(toutput, n);
-	printf("\n");
-	printf("\n");
-	//print_trad(toutput, n);
-	printf("\n");
+		printf("Trad Multiply: %s\n", are_identical_trad(output, toutput, n) ? "Identical" : "DIFFERENT!");
+		//print_trad_binary(toutput, n);
+		printf("\n");
+		printf("\n");
+		//print_trad(toutput, n);
+		printf("\n");
 
-	multiply_trad(ttemp, toutput, tinput, n);
-	copy_trad(toutput, ttemp, n);
+		multiply_trad(ttemp, toutput, tinput, n);
+		copy_trad(toutput, ttemp, n);
 
-	printf("Trad Multiply (2):\n");
-	//print_trad_binary(toutput, n);
-	printf("\n");
-	printf("\n");
-	//print_trad(toutput, n);
-	printf("\n");
+		printf("Trad Multiply (2):\n");
+		//print_trad_binary(toutput, n);
+		printf("\n");
+		printf("\n");
+		//print_trad(toutput, n);
+		printf("\n");
 
-	power_trad(tfinal, tinput, n, 3);
-	printf("Trad Power (3): %s\n", are_identical_trad_pure(toutput, tfinal, n) ? "Identical" : "DIFFERENT!");
-	//print_trad(tfinal, n);
-	printf("\n");
+		power_trad(tfinal, tinput, n, 3);
+		printf("Trad Power (3): %s\n", are_identical_trad_pure(toutput, tfinal, n) ? "Identical" : "DIFFERENT!");
+		//print_trad(tfinal, n);
+		printf("\n");
 
 
-	for (rep = 0; rep < warmups_trad; rep++) {
-		power_trad(tfinal, tinput, n, p);
+		for (rep = 0; rep < warmups_trad; rep++) {
+			power_trad(tfinal, tinput, n, p);
+		}
+		gettimeofday(&start, NULL);
+		for (rep = 0; rep < reps_trad; rep++) {
+			power_trad(tfinal, tinput, n, p);
+		}
+		gettimeofday(&end, NULL);
+		printf("Trad Power (%u): %s\n", p, are_identical_trad(final, tfinal, n) ? "Identical" : "DIFFERENT!");
+		timersub(&end, &start, &diff_trad);
+		//print_trad_binary(tfinal, n);
+		printf("\n");
+		printf("\n");
+		//print_trad(tfinal, n);
+		printf("\n");
 	}
-	gettimeofday(&start, NULL);
-	for (rep = 0; rep < reps_trad; rep++) {
-		power_trad(tfinal, tinput, n, p);
-	}
-	gettimeofday(&end, NULL);
-	printf("Trad Power (%u): %s\n", p, are_identical_trad(final, tfinal, n) ? "Identical" : "DIFFERENT!");
-	timersub(&end, &start, &diff_trad);
-	//print_trad_binary(tfinal, n);
-	printf("\n");
-	printf("\n");
-	//print_trad(tfinal, n);
-	printf("\n");
 #endif
 
 	printf("     Power (%u): Time for %u reps: %ld.%06lds\n", p, reps, diff.tv_sec, diff.tv_usec);
 #if defined(BINMAT_TRAD)
-	printf("Trad power (%u): Time for %u reps: %ld.%06lds\n", p, reps_trad, diff_trad.tv_sec, diff_trad.tv_usec);
+	if (do_trad) {
+		printf("Trad power (%u): Time for %u reps: %ld.%06lds\n", p, reps_trad, diff_trad.tv_sec, diff_trad.tv_usec);
+	}
 #endif
 
 
@@ -432,12 +445,14 @@ int main(int argc, char *argv[]) {
 	printf("binmat-test: done\n");
 
 #if defined(BINMAT_TRAD)
-	printf("binmat-test: freeing trads...\n");
-	free(tinput);
-	free(toutput);
-	free(tfinal);
-	free(ttemp);
-	printf("binmat-test: done\n");
+	if (do_trad) {
+		printf("binmat-test: freeing trads...\n");
+		free(tinput);
+		free(toutput);
+		free(tfinal);
+		free(ttemp);
+		printf("binmat-test: done\n");
+	}
 #endif
 
 	return 0;
