@@ -232,43 +232,43 @@ int b_arg(int argc, char *argv[], int *i, const char *arg, int *result, int inve
 
 
 int main(int argc, char *argv[]) {
-	binmat_index_t n;
+	binmat_index_t n = 0;
 
-	binmat_data_t *input;
-	binmat_data_t *trans;
-	binmat_data_t *output;
-	binmat_data_t *final;
-	binmat_data_t *transcheck;
-	binmat_data_t *output_slow;
+	binmat_data_t *input = NULL;
+	binmat_data_t *trans = NULL;
+	binmat_data_t *output = NULL;
+	binmat_data_t *final = NULL;
+	binmat_data_t *transcheck = NULL;
+	binmat_data_t *output_slow = NULL;
 
-	TRAD *tinput;
-	TRAD *toutput;
-	TRAD *tfinal;
-	TRAD *ttemp;
-	TRAD *ttrans;
-	TRAD *ttranscheck;
+	TRAD *tinput = NULL;
+	TRAD *toutput = NULL;
+	TRAD *tfinal = NULL;
+	TRAD *ttemp = NULL;
+	TRAD *ttrans = NULL;
+	TRAD *ttranscheck = NULL;
 
-	unsigned int p;
+	unsigned int p = 0;
 
-	double density;
-	unsigned int row;
-	unsigned int col;
+	double density = 0;
+	unsigned int row = 0;
+	unsigned int col = 0;
 
-	struct timeval start;
-	struct timeval end;
-	struct timeval diff;
-	struct timeval diff_trad;
+	struct timeval start = { .tv_sec = 0, .tv_usec = 0 };
+	struct timeval end = { .tv_sec = 0, .tv_usec = 0 };
+	struct timeval diff = { .tv_sec = 0, .tv_usec = 0 };
+	struct timeval diff_trad = { .tv_sec = 0, .tv_usec = 0 };
 
-	unsigned int rep;
-	unsigned int warmups;
-	unsigned int reps;
-	unsigned int warmups_trad;
-	unsigned int reps_trad;
-	unsigned int seed;
+	unsigned int rep = 0;
+	unsigned int warmups = 0;
+	unsigned int reps = 0;
+	unsigned int warmups_trad = 0;
+	unsigned int reps_trad = 0;
+	unsigned int seed = 0;
 
-	int do_trad;
+	int do_trad = 0;
 
-	int i;
+	int i = 0;
 
 
 
