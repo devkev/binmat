@@ -225,8 +225,6 @@ int main(int argc, char *argv[]) {
 
 	printf("binmat-test: %ux%u matrix, to %u power\n", n, n, p);
 	printf("binmat-test: binmat_chunkbytes = %lu, binmat_chunkbits = %lu\n", binmat_chunkbytes, binmat_chunkbits);
-	binmat_dprintf("binmat-test: %lux%lu matrix, to %lu power\n", n, n, p);
-	binmat_dprintf("binmat-test: binmat_chunkbytes = %lu, binmat_chunkbits = %lu\n", binmat_chunkbytes, binmat_chunkbits);
 
 
 	input = binmat_alloc(n);
