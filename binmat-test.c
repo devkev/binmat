@@ -245,19 +245,6 @@ int main(int argc, char *argv[]) {
 	ttranscheck = malloc(sizeof(TRAD) * n * n);
 #endif
 
-
-
-	////printf("TYPE = %s\n", TYPENAME(TYPE));
-	////printf(litcal("TYPE = ", TYPE));
-	//printf("n = %d\n", n);
-	//printf("chunk = sizeof(TYPE) = %d (%d bits)\n", chunk, chunk*8);
-	//printf("n = %d\n", n);
-	//printf("N*n = %d\n", N*n);
-	//printf("N*n*chunk = %d\n", N*n*chunk);
-	//printf("sizeof(input) = %d\n", sizeof(input));
-	//printf("sizeof(TRAD) = %d\n", sizeof(TRAD));
-
-
 	memset(input, 0xF8, binmat_numbytes(n));
 	memset(trans, 0xF9, binmat_numbytes(n));
 	memset(output, 0xFA, binmat_numbytes(n));
@@ -282,8 +269,6 @@ int main(int argc, char *argv[]) {
 	//density = 0.095;
 	for (row = 0; row < n; row++) {
 		for (col = 0; col < n; col++) {
-			// GAH, need to flip this col,row order, but later
-			//binmat_setbit(input, n, col, row, ( ((double)rand()) / ((double)RAND_MAX) < density ));
 			binmat_setbit(input, n, row, col, ( ((double)rand()) / ((double)RAND_MAX) < density ));
 		}
 	}
