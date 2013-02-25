@@ -15,12 +15,9 @@
 #endif
 
 
-#if defined(BINMAT_TRAD)
-
 #if !defined(TRAD)
 #define TRAD unsigned int
 //#define TRAD unsigned char
-#endif
 
 
 
@@ -169,14 +166,12 @@ int main(int argc, char *argv[]) {
 	binmat_data_t *transcheck;
 	binmat_data_t *output_slow;
 
-#if defined(BINMAT_TRAD)
 	TRAD *tinput;
 	TRAD *toutput;
 	TRAD *tfinal;
 	TRAD *ttemp;
 	TRAD *ttrans;
 	TRAD *ttranscheck;
-#endif
 
 	unsigned int p;
 
@@ -192,10 +187,8 @@ int main(int argc, char *argv[]) {
 	unsigned int rep;
 	unsigned int warmups;
 	unsigned int reps;
-#if defined(BINMAT_TRAD)
 	unsigned int warmups_trad;
 	unsigned int reps_trad;
-#endif
 	unsigned int seed;
 
 	int do_trad;
@@ -221,12 +214,10 @@ int main(int argc, char *argv[]) {
 	//reps = 10;
 	warmups = 1;
 	reps = 1;
-#if defined(BINMAT_TRAD)
 	if (do_trad) {
 		warmups_trad = 1;
 		reps_trad = 1;
 	}
-#endif
 
 	//density = 0.2;
 	//density = 0.075;
@@ -249,7 +240,6 @@ int main(int argc, char *argv[]) {
 	output_slow = binmat_alloc(n);
 	printf("binmat-test: done\n");
 
-#if defined(BINMAT_TRAD)
 	if (do_trad) {
 		printf("binmat-test: Allocating trads...\n");
 		tinput = malloc(sizeof(TRAD) * n * n);
@@ -260,7 +250,6 @@ int main(int argc, char *argv[]) {
 		ttranscheck = malloc(sizeof(TRAD) * n * n);
 		printf("binmat-test: done\n");
 	}
-#endif
 
 	printf("binmat-test: memsetting binmats...\n");
 	memset(input, 0xF8, binmat_numbytes(n));
@@ -269,7 +258,6 @@ int main(int argc, char *argv[]) {
 	memset(final, 0xFB, binmat_numbytes(n));
 	printf("binmat-test: done\n");
 
-#if defined(BINMAT_TRAD)
 	if (do_trad) {
 		printf("binmat-test: memsetting trads...\n");
 		memset(tinput, 0xFC, sizeof(TRAD) * n * n);
@@ -279,7 +267,6 @@ int main(int argc, char *argv[]) {
 		memset(ttranscheck, 0xF1, sizeof(TRAD) * n * n);
 		printf("binmat-test: done\n");
 	}
-#endif
 
 
 
@@ -356,7 +343,6 @@ int main(int argc, char *argv[]) {
 
 
 
-#if defined(BINMAT_TRAD)
 	if (do_trad) {
 		init_trad(tinput, input, n);
 
@@ -424,14 +410,11 @@ int main(int argc, char *argv[]) {
 		//print_trad(tfinal, n);
 		printf("\n");
 	}
-#endif
 
 	printf("     Power (%u): Time for %u reps: %ld.%06lds\n", p, reps, diff.tv_sec, diff.tv_usec);
-#if defined(BINMAT_TRAD)
 	if (do_trad) {
 		printf("Trad power (%u): Time for %u reps: %ld.%06lds\n", p, reps_trad, diff_trad.tv_sec, diff_trad.tv_usec);
 	}
-#endif
 
 
 
@@ -444,7 +427,6 @@ int main(int argc, char *argv[]) {
 	binmat_free(output_slow);
 	printf("binmat-test: done\n");
 
-#if defined(BINMAT_TRAD)
 	if (do_trad) {
 		printf("binmat-test: freeing trads...\n");
 		free(tinput);
@@ -453,7 +435,6 @@ int main(int argc, char *argv[]) {
 		free(ttemp);
 		printf("binmat-test: done\n");
 	}
-#endif
 
 	return 0;
 }
