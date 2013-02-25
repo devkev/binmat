@@ -179,7 +179,6 @@ int main(int argc, char *argv[]) {
 #endif
 
 	unsigned int p;
-	unsigned int i, j, k;
 	unsigned int offset1, offset2;
 
 	double density;
