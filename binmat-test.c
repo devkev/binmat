@@ -267,6 +267,7 @@ int main(int argc, char *argv[]) {
 	unsigned int seed = 0;
 
 	int do_trad = 0;
+	int do_print = 0;
 
 	int i = 0;
 
@@ -285,6 +286,7 @@ int main(int argc, char *argv[]) {
 	seed = time(NULL);
 
 	do_trad = 1;
+	do_print = 0;
 
 
 	for (i = 1; i < argc; i++) {
@@ -319,6 +321,15 @@ int main(int argc, char *argv[]) {
 		} else if (b_arg(argc, argv, &i, "-T", &do_trad, 1)) {
 		} else if (b_arg(argc, argv, &i, "--no-trad", &do_trad, 1)) {
 
+		} else if (b_arg(argc, argv, &i, "-v", &do_print, 0)) {
+		} else if (b_arg(argc, argv, &i, "--verbose", &do_print, 0)) {
+		} else if (b_arg(argc, argv, &i, "--print", &do_print, 0)) {
+		} else if (b_arg(argc, argv, &i, "--no-silent", &do_print, 0)) {
+		} else if (b_arg(argc, argv, &i, "-V", &do_print, 1)) {
+		} else if (b_arg(argc, argv, &i, "--no-verbose", &do_print, 1)) {
+		} else if (b_arg(argc, argv, &i, "--no-print", &do_print, 1)) {
+		} else if (b_arg(argc, argv, &i, "--silent", &do_print, 1)) {
+
 		} else {
 			fprintf(stderr, "binmat-test: Error: unknown arg \"%s\"\n", argv[i]);
 			exit(1);
@@ -330,6 +341,14 @@ int main(int argc, char *argv[]) {
 	fprintf(stderr, "binmat-test: binmat_chunkbytes = %lu, binmat_chunkbits = %lu\n", binmat_chunkbytes, binmat_chunkbits);
 	fprintf(stderr, "binmat-test: density %lf\n", density);
 	fprintf(stderr, "binmat-test: do_trad? %s\n", do_trad ? "yes" : "no");
+
+	fprintf(stderr, "finalchunkbits(%u) = %lu\n", n, binmat_finalchunkbits(n));
+	fprintf(stderr, "finalchunkmask(%u) = 0x%"BINMAT_PRINTF_MODIFIER"x\n", n, binmat_finalchunkmask(n));
+	fprintf(stderr, "finalchunkbits(%lu) = %lu\n", binmat_chunkbits, binmat_finalchunkbits(binmat_chunkbits));
+	fprintf(stderr, "finalchunkmask(%lu) = 0x%"BINMAT_PRINTF_MODIFIER"x\n", binmat_chunkbits, binmat_finalchunkmask(binmat_chunkbits));
+	fprintf(stderr, "finalchunkbits(%lu) = %lu\n", 5*binmat_chunkbits, binmat_finalchunkbits(5*binmat_chunkbits));
+	fprintf(stderr, "finalchunkmask(%lu) = 0x%"BINMAT_PRINTF_MODIFIER"x\n", 5*binmat_chunkbits, binmat_finalchunkmask(5*binmat_chunkbits));
+	fprintf(stderr, "\n");
 
 
 	fprintf(stderr, "binmat-test: Allocating binmats...\n");
@@ -371,147 +390,159 @@ int main(int argc, char *argv[]) {
 
 	// setup input
 	srand(seed);
+	printf("Input: ");
 	for (row = 0; row < n; row++) {
 		for (col = 0; col < n; col++) {
 			binmat_setbit(input, n, row, col, ( ((double)rand()) / ((double)RAND_MAX) < density ));
 		}
 	}
+	printf("done\n");
 
 
-	printf("Input (hex):\n");
-	//binmat_print_matrix_hex(stdout, input, n);
-	printf("\n");
-	printf("Input:\n");
-	//binmat_print_matrix_slow(stdout, input, n);
-	printf("\n");
-	printf("Input (fast print):\n");
-	//binmat_print_matrix_fast(stdout, input, n);
-	printf("\n");
+	if (do_print) {
+		binmat_print_matrix_slow(stdout, input, n);
+		printf("\n");
+		// Fast printing and hex printing are currently buggy.
+		//printf("Input (fast print):\n");
+		//binmat_print_matrix_fast(stdout, input, n);
+		//printf("\n");
+		//printf("Input (hex):\n");
+		//binmat_print_matrix_hex(stdout, input, n);
+		//printf("\n");
+	}
 
 
 	// setup trans
+	printf("Trans: ");
 	binmat_transpose(trans, input, n);
-	printf("Trans:\n");
-	//binmat_print_matrix_slow(stdout, trans, n);
-	printf("\n");
+	printf("done\n");
+	if (do_print) {
+		binmat_print_matrix_slow(stdout, trans, n);
+		printf("\n");
+	}
 
-
-	fprintf(stderr, "finalchunkbits(%u) = %lu\n", n, binmat_finalchunkbits(n));
-	fprintf(stderr, "finalchunkmask(%u) = 0x%"BINMAT_PRINTF_MODIFIER"x\n", n, binmat_finalchunkmask(n));
-	fprintf(stderr, "finalchunkbits(%lu) = %lu\n", binmat_chunkbits, binmat_finalchunkbits(binmat_chunkbits));
-	fprintf(stderr, "finalchunkmask(%lu) = 0x%"BINMAT_PRINTF_MODIFIER"x\n", binmat_chunkbits, binmat_finalchunkmask(binmat_chunkbits));
-	fprintf(stderr, "finalchunkbits(%lu) = %lu\n", 5*binmat_chunkbits, binmat_finalchunkbits(5*binmat_chunkbits));
-	fprintf(stderr, "finalchunkmask(%lu) = 0x%"BINMAT_PRINTF_MODIFIER"x\n", 5*binmat_chunkbits, binmat_finalchunkmask(5*binmat_chunkbits));
-	fprintf(stderr, "\n");
 
 	// check trans
+	printf("Transcheck: ");
 	binmat_transpose(transcheck, trans, n);
-	printf("Transcheck: %s\n", binmat_are_identical(input, transcheck, n) ? "Identical" : "DIFFERENT!");
-	//binmat_print_matrix_slow(stdout, transcheck, n);
-	printf("\n");
+	printf("%s\n", binmat_are_identical(input, transcheck, n) ? "Identical" : "DIFFERENT!");
+	if (do_print) {
+		binmat_print_matrix_slow(stdout, transcheck, n);
+		printf("\n");
+	}
 
 
 
+	printf("Multiply (slow): ");
 	binmat_multiply_slow(output_slow, input, input, n);
-	printf("Multiply (slow):\n");
-	//binmat_print_matrix_slow(stdout, output_slow, n);
-	printf("\n");
+	printf("done\n");
+	if (do_print) {
+		binmat_print_matrix_slow(stdout, output_slow, n);
+		printf("\n");
+	}
 
 
+	printf("Multiply: ");
 	binmat_multiply(output, input, trans, n);
-	printf("Multiply: %s\n", binmat_are_identical(output, output_slow, n) ? "Identical" : "DIFFERENT!");
-	//binmat_print_matrix_slow(stdout, output, n);
-	printf("\n");
+	printf("%s\n", binmat_are_identical(output, output_slow, n) ? "Identical" : "DIFFERENT!");
+	if (do_print) {
+		binmat_print_matrix_slow(stdout, output, n);
+		printf("\n");
+	}
 
+	printf("Power (%u) (%u warmups): ", p, warmups);
 	for (rep = 0; rep < warmups; rep++) {
 		binmat_power(final, input, trans, n, p);
 	}
+	printf("done\n");
+	printf("Power (%u) (%u reps): ", p, reps);
 	gettimeofday(&start, NULL);
 	for (rep = 0; rep < reps; rep++) {
 		binmat_power(final, input, trans, n, p);
 	}
 	gettimeofday(&end, NULL);
-	printf("Power (%u):\n", p);
+	printf("done\n");
+	if (do_print) {
+		binmat_print_matrix_slow(stdout, final, n);
+		printf("\n");
+	}
 	timersub(&end, &start, &diff);
 	printf("Time for %u reps: %ld.%06lds\n", reps, diff.tv_sec, diff.tv_usec);
-	//binmat_print_matrix_slow(stdout, final, n);
 	printf("\n");
 
 
-
-
-
-
 	if (do_trad) {
+		printf("Trad Input: ");
 		init_trad(tinput, input, n);
+		printf("%s\n", are_identical_trad(input, tinput, n) ? "Identical" : "DIFFERENT!");
+		if (do_print) {
+			print_trad_binary(tinput, n);
+			printf("\n");
+			//print_trad(ttrans, n);
+			//printf("\n");
+		}
 
-		printf("Trad Input: %s\n", are_identical_trad(input, tinput, n) ? "Identical" : "DIFFERENT!");
-		//print_trad_binary(tinput, n);
-		printf("\n");
-
+		printf("Trad Trans: ");
 		transpose_trad(ttrans, tinput, n);
+		printf("%s\n", are_identical_trad(trans, ttrans, n) ? "Identical" : "DIFFERENT!");
+		if (do_print) {
+			print_trad_binary(ttrans, n);
+			printf("\n");
+		}
 
-		printf("Trad Trans: %s\n", are_identical_trad(trans, ttrans, n) ? "Identical" : "DIFFERENT!");
-		//print_trad_binary(ttrans, n);
-		printf("\n");
-		printf("\n");
-		//print_trad(ttrans, n);
-		printf("\n");
-
+		printf("Trad Transcheck: ");
 		transpose_trad(ttranscheck, ttrans, n);
-		printf("Done\n");
+		printf("%s %s\n", are_identical_trad(transcheck, ttranscheck, n) ? "Identical" : "DIFFERENT!", are_identical_trad_pure(tinput, ttranscheck, n) ? "Identical" : "DIFFERENT!");
+		if (do_print) {
+			print_trad_binary(ttranscheck, n);
+			printf("\n");
+		}
 
-		printf("Trad Transcheck: %s %s\n", are_identical_trad(transcheck, ttranscheck, n) ? "Identical" : "DIFFERENT!", are_identical_trad_pure(tinput, ttranscheck, n) ? "Identical" : "DIFFERENT!");
-		//print_trad_binary(ttranscheck, n);
-		printf("\n");
-		printf("\n");
-		//print_trad(ttranscheck, n);
-		printf("\n");
-
+		printf("Trad Multiply: ");
 		multiply_trad(toutput, tinput, tinput, n);
+		printf("%s\n", are_identical_trad(output, toutput, n) ? "Identical" : "DIFFERENT!");
+		if (do_print) {
+			print_trad_binary(toutput, n);
+			printf("\n");
+		}
 
-		printf("Trad Multiply: %s\n", are_identical_trad(output, toutput, n) ? "Identical" : "DIFFERENT!");
-		//print_trad_binary(toutput, n);
-		printf("\n");
-		printf("\n");
-		//print_trad(toutput, n);
-		printf("\n");
-
+		printf("Trad Multiply (2): ");
 		multiply_trad(ttemp, toutput, tinput, n);
 		copy_trad(toutput, ttemp, n);
+		printf("done\n");
+		if (do_print) {
+			print_trad_binary(toutput, n);
+			printf("\n");
+		}
 
-		printf("Trad Multiply (2):\n");
-		//print_trad_binary(toutput, n);
-		printf("\n");
-		printf("\n");
-		//print_trad(toutput, n);
-		printf("\n");
-
+		printf("Trad Power (3): ");
 		power_trad(tfinal, tinput, n, 3);
-		printf("Trad Power (3): %s\n", are_identical_trad_pure(toutput, tfinal, n) ? "Identical" : "DIFFERENT!");
-		//print_trad(tfinal, n);
-		printf("\n");
+		printf("%s\n", are_identical_trad_pure(toutput, tfinal, n) ? "Identical" : "DIFFERENT!");
+		if (do_print) {
+			print_trad(tfinal, n);
+			printf("\n");
+		}
 
 
+		printf("Trad Power (%u) (%u warmups): ", p, warmups_trad);
 		for (rep = 0; rep < warmups_trad; rep++) {
 			power_trad(tfinal, tinput, n, p);
 		}
+		printf("done\n");
+		printf("Trad Power (%u) (%u reps): ", p, reps_trad);
 		gettimeofday(&start, NULL);
 		for (rep = 0; rep < reps_trad; rep++) {
 			power_trad(tfinal, tinput, n, p);
 		}
 		gettimeofday(&end, NULL);
-		printf("Trad Power (%u): %s\n", p, are_identical_trad(final, tfinal, n) ? "Identical" : "DIFFERENT!");
+		printf("%s\n", are_identical_trad(final, tfinal, n) ? "Identical" : "DIFFERENT!");
 		timersub(&end, &start, &diff_trad);
-		//print_trad_binary(tfinal, n);
-		printf("\n");
-		printf("\n");
-		//print_trad(tfinal, n);
-		printf("\n");
-	}
+		if (do_print) {
+			print_trad_binary(tfinal, n);
+			printf("\n");
+		}
 
-	printf("     Power (%u): Time for %u reps: %ld.%06lds\n", p, reps, diff.tv_sec, diff.tv_usec);
-	if (do_trad) {
+		printf("     Power (%u): Time for %u reps: %ld.%06lds\n", p, reps, diff.tv_sec, diff.tv_usec);
 		printf("Trad power (%u): Time for %u reps: %ld.%06lds\n", p, reps_trad, diff_trad.tv_sec, diff_trad.tv_usec);
 	}
 
