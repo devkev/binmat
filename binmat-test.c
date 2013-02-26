@@ -361,39 +361,39 @@ int main(int argc, char *argv[]) {
 	fprintf(stderr, "\n");
 
 
-	fprintf(stderr, "binmat-test: Allocating binmats...\n");
+	fprintf(stderr, "Allocating: ");
 	input = binmat_alloc(n);
 	trans = binmat_alloc(n);
 	output = binmat_alloc(n);
 	final = binmat_alloc(n);
 	transcheck = binmat_alloc(n);
 	output_slow = binmat_alloc(n);
-	fprintf(stderr, "binmat-test: done\n");
+	fprintf(stderr, "done\n");
 
-	fprintf(stderr, "binmat-test: memsetting binmats...\n");
+	fprintf(stderr, "Memsetting: ");
 	memset(input, 0xF8, binmat_numbytes(n));
 	memset(trans, 0xF9, binmat_numbytes(n));
 	memset(output, 0xFA, binmat_numbytes(n));
 	memset(final, 0xFB, binmat_numbytes(n));
-	fprintf(stderr, "binmat-test: done\n");
+	fprintf(stderr, "done\n");
 
 	if (do_trad) {
-		fprintf(stderr, "binmat-test: Allocating trads...\n");
+		fprintf(stderr, "Trad Allocating: ");
 		tinput = malloc(sizeof(TRAD) * n * n);
 		toutput = malloc(sizeof(TRAD) * n * n);
 		tfinal = malloc(sizeof(TRAD) * n * n);
 		ttemp = malloc(sizeof(TRAD) * n * n);
 		ttrans = malloc(sizeof(TRAD) * n * n);
 		ttranscheck = malloc(sizeof(TRAD) * n * n);
-		fprintf(stderr, "binmat-test: done\n");
+		fprintf(stderr, "done\n");
 
-		fprintf(stderr, "binmat-test: memsetting trads...\n");
+		fprintf(stderr, "Trad Memsetting: ");
 		memset(tinput, 0xFC, sizeof(TRAD) * n * n);
 		memset(toutput, 0xFD, sizeof(TRAD) * n * n);
 		memset(tfinal, 0xFE, sizeof(TRAD) * n * n);
 		memset(ttrans, 0xF0, sizeof(TRAD) * n * n);
 		memset(ttranscheck, 0xF1, sizeof(TRAD) * n * n);
-		fprintf(stderr, "binmat-test: done\n");
+		fprintf(stderr, "done\n");
 	}
 
 
@@ -566,22 +566,22 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr, "\n");
 	}
 
-	fprintf(stderr, "binmat-test: freeing binmats...\n");
+	fprintf(stderr, "Freeing: ");
 	binmat_free(input);
 	binmat_free(trans);
 	binmat_free(output);
 	binmat_free(final);
 	binmat_free(transcheck);
 	binmat_free(output_slow);
-	fprintf(stderr, "binmat-test: done\n");
+	fprintf(stderr, "done\n");
 
 	if (do_trad) {
-		fprintf(stderr, "binmat-test: freeing trads...\n");
+		fprintf(stderr, "Trad Freeing: ");
 		free(tinput);
 		free(toutput);
 		free(tfinal);
 		free(ttemp);
-		fprintf(stderr, "binmat-test: done\n");
+		fprintf(stderr, "done\n");
 	}
 
 	return 0;
