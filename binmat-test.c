@@ -34,31 +34,31 @@ void init_trad(TRAD *output, const binmat_data_t *input, binmat_index_t n) {
 	}
 }
 
-void print_trad_binary(const TRAD *m, binmat_index_t n) {
+void print_trad_binary(FILE *f, const TRAD *m, binmat_index_t n) {
 	binmat_index_t row;
 	binmat_index_t col;
 
 	for (row = 0; row < n; row++) {
 		for (col = 0; col < n; col++) {
-			printf("%u", m[row * n + col] ? 1 : 0);
+			fprintf(f, "%u", m[row * n + col] ? 1 : 0);
 		}
-		printf("\n");
+		fprintf(f, "\n");
 	}
 }
 
-void print_trad(const TRAD *m, binmat_index_t n) {
+void print_trad(FILE *f, const TRAD *m, binmat_index_t n) {
 	binmat_index_t row;
 	binmat_index_t col;
 
 	// FIXME: columns
 	for (row = 0; row < n; row++) {
 		for (col = 0; col < n; col++) {
-			printf("%u", m[row * n + col]);
+			fprintf(f, "%u", m[row * n + col]);
 			if (col < n-1) {
-				printf(",");
+				fprintf(f, ",");
 			}
 		}
-		printf("\n");
+		fprintf(f, "\n");
 	}
 }
 
@@ -486,9 +486,9 @@ int main(int argc, char *argv[]) {
 		init_trad(tinput, input, n);
 		fprintf(stderr, "%s\n", check(are_identical_trad(input, tinput, n)));
 		if (do_print) {
-			print_trad_binary(tinput, n);
+			print_trad_binary(stderr, tinput, n);
 			fprintf(stderr, "\n");
-			//print_trad(ttrans, n);
+			//print_trad(stderr, ttrans, n);
 			//fprintf(stderr, "\n");
 		}
 
@@ -496,7 +496,7 @@ int main(int argc, char *argv[]) {
 		transpose_trad(ttrans, tinput, n);
 		fprintf(stderr, "%s\n", check(are_identical_trad(trans, ttrans, n)));
 		if (do_print) {
-			print_trad_binary(ttrans, n);
+			print_trad_binary(stderr, ttrans, n);
 			fprintf(stderr, "\n");
 		}
 
@@ -504,7 +504,7 @@ int main(int argc, char *argv[]) {
 		transpose_trad(ttranscheck, ttrans, n);
 		fprintf(stderr, "%s %s\n", check(are_identical_trad(transcheck, ttranscheck, n)), check(are_identical_trad_pure(tinput, ttranscheck, n)));
 		if (do_print) {
-			print_trad_binary(ttranscheck, n);
+			print_trad_binary(stderr, ttranscheck, n);
 			fprintf(stderr, "\n");
 		}
 
@@ -512,7 +512,7 @@ int main(int argc, char *argv[]) {
 		multiply_trad(toutput, tinput, tinput, n);
 		fprintf(stderr, "%s\n", check(are_identical_trad(output, toutput, n)));
 		if (do_print) {
-			print_trad_binary(toutput, n);
+			print_trad_binary(stderr, toutput, n);
 			fprintf(stderr, "\n");
 		}
 
@@ -521,7 +521,7 @@ int main(int argc, char *argv[]) {
 		copy_trad(toutput, ttemp, n);
 		fprintf(stderr, "done\n");
 		if (do_print) {
-			print_trad_binary(toutput, n);
+			print_trad_binary(stderr, toutput, n);
 			fprintf(stderr, "\n");
 		}
 
@@ -529,7 +529,7 @@ int main(int argc, char *argv[]) {
 		power_trad(tfinal, tinput, n, 3);
 		fprintf(stderr, "%s\n", check(are_identical_trad_pure(toutput, tfinal, n)));
 		if (do_print) {
-			print_trad(tfinal, n);
+			print_trad(stderr, tfinal, n);
 			fprintf(stderr, "\n");
 		}
 
@@ -548,7 +548,7 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr, "%s\n", check(are_identical_trad(final, tfinal, n)));
 		timersub(&end, &start, &diff_trad);
 		if (do_print) {
-			print_trad_binary(tfinal, n);
+			print_trad_binary(stderr, tfinal, n);
 			fprintf(stderr, "\n");
 		}
 
