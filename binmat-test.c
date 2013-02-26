@@ -281,6 +281,13 @@ int main(int argc, char *argv[]) {
 
 	int i = 0;
 
+	double megs_per_matrix = 0;
+	double megs_total = 0;
+	double trad_megs_per_matrix = 0;
+	double trad_megs_total = 0;
+
+	double megs_used = 0;
+	double megs_limit = 0;
 
 
 	// Defaults
@@ -294,6 +301,9 @@ int main(int argc, char *argv[]) {
 
 	density = 0.01;
 	seed = time(NULL);
+
+	megs_used = 0;
+	megs_limit = 1024;
 
 	do_trad = 1;
 	do_print = 0;
@@ -340,6 +350,11 @@ int main(int argc, char *argv[]) {
 		} else if (b_arg(argc, argv, &i, "--no-print", &do_print, 1)) {
 		} else if (b_arg(argc, argv, &i, "--silent", &do_print, 1)) {
 
+		} else if (d_arg(argc, argv, &i, "-l", &megs_limit)) {
+		} else if (d_arg(argc, argv, &i, "--limit", &megs_limit)) {
+		} else if (d_arg(argc, argv, &i, "--mem-limit", &megs_limit)) {
+		} else if (d_arg(argc, argv, &i, "--memory-limit", &megs_limit)) {
+
 		} else {
 			fprintf(stderr, "binmat-test: Error: unknown arg \"%s\"\n", argv[i]);
 			exit(1);
@@ -361,6 +376,17 @@ int main(int argc, char *argv[]) {
 	fprintf(stderr, "\n");
 
 
+	megs_per_matrix = (double)(binmat_numbytes(n))/1048576.0;
+	megs_total = 6 * megs_per_matrix;
+	fprintf(stderr, "Size: %lf MiB per matrix, %lf MiB total\n", megs_per_matrix, megs_total);
+
+	megs_used += megs_total;
+	if (megs_used > megs_limit) {
+		fprintf(stderr, "Error: Attempting to use over your memory limit (%lf MiB required, %lf MiB limit).\n", megs_used, megs_limit);
+		fprintf(stderr, "Use --limit to increase the limit, or use a smaller test case.\n");
+		exit(1);
+	}
+
 	fprintf(stderr, "Allocating: ");
 	input = binmat_alloc(n);
 	trans = binmat_alloc(n);
@@ -378,6 +404,17 @@ int main(int argc, char *argv[]) {
 	fprintf(stderr, "done\n");
 
 	if (do_trad) {
+		trad_megs_per_matrix = (double)(sizeof(TRAD) * n * n)/1048576.0;
+		trad_megs_total = 6 * trad_megs_per_matrix;
+		fprintf(stderr, "Trad Size: %lf MiB per matrix, %lf MiB total\n", trad_megs_per_matrix, trad_megs_total);
+
+		megs_used += trad_megs_total;
+		if (megs_used > megs_limit) {
+			fprintf(stderr, "Error: Attempting to use over your memory limit (%lf MiB required, %lf MiB limit).\n", megs_used, megs_limit);
+			fprintf(stderr, "Use --limit to increase the limit, use a smaller test case, or consider using --no-trad to not run the traditional matrix tests.\n");
+			exit(1);
+		}
+
 		fprintf(stderr, "Trad Allocating: ");
 		tinput = malloc(sizeof(TRAD) * n * n);
 		toutput = malloc(sizeof(TRAD) * n * n);
