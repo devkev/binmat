@@ -400,170 +400,170 @@ int main(int argc, char *argv[]) {
 
 	// setup input
 	srand(seed);
-	printf("Input: ");
+	fprintf(stderr, "Input: ");
 	for (row = 0; row < n; row++) {
 		for (col = 0; col < n; col++) {
 			binmat_setbit(input, n, row, col, ( ((double)rand()) / ((double)RAND_MAX) < density ));
 		}
 	}
-	printf("done\n");
+	fprintf(stderr, "done\n");
 
 
 	if (do_print) {
 		binmat_print_matrix_slow(stdout, input, n);
-		printf("\n");
+		fprintf(stderr, "\n");
 		// Fast printing and hex printing are currently buggy.
-		//printf("Input (fast print):\n");
+		//fprintf(stderr, "Input (fast print):\n");
 		//binmat_print_matrix_fast(stdout, input, n);
-		//printf("\n");
-		//printf("Input (hex):\n");
+		//fprintf(stderr, "\n");
+		//fprintf(stderr, "Input (hex):\n");
 		//binmat_print_matrix_hex(stdout, input, n);
-		//printf("\n");
+		//fprintf(stderr, "\n");
 	}
 
 
 	// setup trans
-	printf("Trans: ");
+	fprintf(stderr, "Trans: ");
 	binmat_transpose(trans, input, n);
-	printf("done\n");
+	fprintf(stderr, "done\n");
 	if (do_print) {
 		binmat_print_matrix_slow(stdout, trans, n);
-		printf("\n");
+		fprintf(stderr, "\n");
 	}
 
 
 	// check trans
-	printf("Transcheck: ");
+	fprintf(stderr, "Transcheck: ");
 	binmat_transpose(transcheck, trans, n);
-	printf("%s\n", check(binmat_are_identical(input, transcheck, n)));
+	fprintf(stderr, "%s\n", check(binmat_are_identical(input, transcheck, n)));
 	if (do_print) {
 		binmat_print_matrix_slow(stdout, transcheck, n);
-		printf("\n");
+		fprintf(stderr, "\n");
 	}
 
 
 
-	printf("Multiply (slow): ");
+	fprintf(stderr, "Multiply (slow): ");
 	binmat_multiply_slow(output_slow, input, input, n);
-	printf("done\n");
+	fprintf(stderr, "done\n");
 	if (do_print) {
 		binmat_print_matrix_slow(stdout, output_slow, n);
-		printf("\n");
+		fprintf(stderr, "\n");
 	}
 
 
-	printf("Multiply: ");
+	fprintf(stderr, "Multiply: ");
 	binmat_multiply(output, input, trans, n);
-	printf("%s\n", check(binmat_are_identical(output, output_slow, n)));
+	fprintf(stderr, "%s\n", check(binmat_are_identical(output, output_slow, n)));
 	if (do_print) {
 		binmat_print_matrix_slow(stdout, output, n);
-		printf("\n");
+		fprintf(stderr, "\n");
 	}
 
-	printf("Power (%u) (%u warmups): ", p, warmups);
+	fprintf(stderr, "Power (%u) (%u warmups): ", p, warmups);
 	for (rep = 0; rep < warmups; rep++) {
 		binmat_power(final, input, trans, n, p);
 	}
-	printf("done\n");
-	printf("Power (%u) (%u reps): ", p, reps);
+	fprintf(stderr, "done\n");
+	fprintf(stderr, "Power (%u) (%u reps): ", p, reps);
 	gettimeofday(&start, NULL);
 	for (rep = 0; rep < reps; rep++) {
 		binmat_power(final, input, trans, n, p);
 	}
 	gettimeofday(&end, NULL);
-	printf("done\n");
+	fprintf(stderr, "done\n");
 	if (do_print) {
 		binmat_print_matrix_slow(stdout, final, n);
-		printf("\n");
+		fprintf(stderr, "\n");
 	}
 	timersub(&end, &start, &diff);
-	printf("Time for %u reps: %ld.%06lds\n", reps, diff.tv_sec, diff.tv_usec);
-	printf("\n");
+	fprintf(stderr, "Time for %u reps: %ld.%06lds\n", reps, diff.tv_sec, diff.tv_usec);
+	fprintf(stderr, "\n");
 
 
 	if (do_trad) {
-		printf("Trad Input: ");
+		fprintf(stderr, "Trad Input: ");
 		init_trad(tinput, input, n);
-		printf("%s\n", check(are_identical_trad(input, tinput, n)));
+		fprintf(stderr, "%s\n", check(are_identical_trad(input, tinput, n)));
 		if (do_print) {
 			print_trad_binary(tinput, n);
-			printf("\n");
+			fprintf(stderr, "\n");
 			//print_trad(ttrans, n);
-			//printf("\n");
+			//fprintf(stderr, "\n");
 		}
 
-		printf("Trad Trans: ");
+		fprintf(stderr, "Trad Trans: ");
 		transpose_trad(ttrans, tinput, n);
-		printf("%s\n", check(are_identical_trad(trans, ttrans, n)));
+		fprintf(stderr, "%s\n", check(are_identical_trad(trans, ttrans, n)));
 		if (do_print) {
 			print_trad_binary(ttrans, n);
-			printf("\n");
+			fprintf(stderr, "\n");
 		}
 
-		printf("Trad Transcheck: ");
+		fprintf(stderr, "Trad Transcheck: ");
 		transpose_trad(ttranscheck, ttrans, n);
-		printf("%s %s\n", check(are_identical_trad(transcheck, ttranscheck, n)), check(are_identical_trad_pure(tinput, ttranscheck, n)));
+		fprintf(stderr, "%s %s\n", check(are_identical_trad(transcheck, ttranscheck, n)), check(are_identical_trad_pure(tinput, ttranscheck, n)));
 		if (do_print) {
 			print_trad_binary(ttranscheck, n);
-			printf("\n");
+			fprintf(stderr, "\n");
 		}
 
-		printf("Trad Multiply: ");
+		fprintf(stderr, "Trad Multiply: ");
 		multiply_trad(toutput, tinput, tinput, n);
-		printf("%s\n", check(are_identical_trad(output, toutput, n)));
+		fprintf(stderr, "%s\n", check(are_identical_trad(output, toutput, n)));
 		if (do_print) {
 			print_trad_binary(toutput, n);
-			printf("\n");
+			fprintf(stderr, "\n");
 		}
 
-		printf("Trad Multiply (2): ");
+		fprintf(stderr, "Trad Multiply (2): ");
 		multiply_trad(ttemp, toutput, tinput, n);
 		copy_trad(toutput, ttemp, n);
-		printf("done\n");
+		fprintf(stderr, "done\n");
 		if (do_print) {
 			print_trad_binary(toutput, n);
-			printf("\n");
+			fprintf(stderr, "\n");
 		}
 
-		printf("Trad Power (3): ");
+		fprintf(stderr, "Trad Power (3): ");
 		power_trad(tfinal, tinput, n, 3);
-		printf("%s\n", check(are_identical_trad_pure(toutput, tfinal, n)));
+		fprintf(stderr, "%s\n", check(are_identical_trad_pure(toutput, tfinal, n)));
 		if (do_print) {
 			print_trad(tfinal, n);
-			printf("\n");
+			fprintf(stderr, "\n");
 		}
 
 
-		printf("Trad Power (%u) (%u warmups): ", p, warmups_trad);
+		fprintf(stderr, "Trad Power (%u) (%u warmups): ", p, warmups_trad);
 		for (rep = 0; rep < warmups_trad; rep++) {
 			power_trad(tfinal, tinput, n, p);
 		}
-		printf("done\n");
-		printf("Trad Power (%u) (%u reps): ", p, reps_trad);
+		fprintf(stderr, "done\n");
+		fprintf(stderr, "Trad Power (%u) (%u reps): ", p, reps_trad);
 		gettimeofday(&start, NULL);
 		for (rep = 0; rep < reps_trad; rep++) {
 			power_trad(tfinal, tinput, n, p);
 		}
 		gettimeofday(&end, NULL);
-		printf("%s\n", check(are_identical_trad(final, tfinal, n)));
+		fprintf(stderr, "%s\n", check(are_identical_trad(final, tfinal, n)));
 		timersub(&end, &start, &diff_trad);
 		if (do_print) {
 			print_trad_binary(tfinal, n);
-			printf("\n");
+			fprintf(stderr, "\n");
 		}
 
-		printf("     Power (%u): Time for %u reps: %ld.%06lds\n", p, reps, diff.tv_sec, diff.tv_usec);
-		printf("Trad power (%u): Time for %u reps: %ld.%06lds\n", p, reps_trad, diff_trad.tv_sec, diff_trad.tv_usec);
+		fprintf(stderr, "     Power (%u): Time for %u reps: %ld.%06lds\n", p, reps, diff.tv_sec, diff.tv_usec);
+		fprintf(stderr, "Trad power (%u): Time for %u reps: %ld.%06lds\n", p, reps_trad, diff_trad.tv_sec, diff_trad.tv_usec);
 	}
 
 
 
 	if (warnings) {
-		printf("\n");
-		printf("!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!\n");
-		printf("   %d CHECK%s GAVE DIFFERENT RESULTS!\n", warnings, (warnings > 1 ? "S" : ""));
-		printf("!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!\n");
-		printf("\n");
+		fprintf(stderr, "\n");
+		fprintf(stderr, "!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!\n");
+		fprintf(stderr, "   %d CHECK%s GAVE DIFFERENT RESULTS!\n", warnings, (warnings > 1 ? "S" : ""));
+		fprintf(stderr, "!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!\n");
+		fprintf(stderr, "\n");
 	}
 
 	fprintf(stderr, "binmat-test: freeing binmats...\n");
