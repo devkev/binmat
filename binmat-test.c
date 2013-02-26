@@ -410,14 +410,14 @@ int main(int argc, char *argv[]) {
 
 
 	if (do_print) {
-		binmat_print_matrix_slow(stdout, input, n);
+		binmat_print_matrix_slow(stderr, input, n);
 		fprintf(stderr, "\n");
 		// Fast printing and hex printing are currently buggy.
 		//fprintf(stderr, "Input (fast print):\n");
-		//binmat_print_matrix_fast(stdout, input, n);
+		//binmat_print_matrix_fast(stderr, input, n);
 		//fprintf(stderr, "\n");
 		//fprintf(stderr, "Input (hex):\n");
-		//binmat_print_matrix_hex(stdout, input, n);
+		//binmat_print_matrix_hex(stderr, input, n);
 		//fprintf(stderr, "\n");
 	}
 
@@ -427,7 +427,7 @@ int main(int argc, char *argv[]) {
 	binmat_transpose(trans, input, n);
 	fprintf(stderr, "done\n");
 	if (do_print) {
-		binmat_print_matrix_slow(stdout, trans, n);
+		binmat_print_matrix_slow(stderr, trans, n);
 		fprintf(stderr, "\n");
 	}
 
@@ -437,7 +437,7 @@ int main(int argc, char *argv[]) {
 	binmat_transpose(transcheck, trans, n);
 	fprintf(stderr, "%s\n", check(binmat_are_identical(input, transcheck, n)));
 	if (do_print) {
-		binmat_print_matrix_slow(stdout, transcheck, n);
+		binmat_print_matrix_slow(stderr, transcheck, n);
 		fprintf(stderr, "\n");
 	}
 
@@ -447,7 +447,7 @@ int main(int argc, char *argv[]) {
 	binmat_multiply_slow(output_slow, input, input, n);
 	fprintf(stderr, "done\n");
 	if (do_print) {
-		binmat_print_matrix_slow(stdout, output_slow, n);
+		binmat_print_matrix_slow(stderr, output_slow, n);
 		fprintf(stderr, "\n");
 	}
 
@@ -456,7 +456,7 @@ int main(int argc, char *argv[]) {
 	binmat_multiply(output, input, trans, n);
 	fprintf(stderr, "%s\n", check(binmat_are_identical(output, output_slow, n)));
 	if (do_print) {
-		binmat_print_matrix_slow(stdout, output, n);
+		binmat_print_matrix_slow(stderr, output, n);
 		fprintf(stderr, "\n");
 	}
 
@@ -473,7 +473,7 @@ int main(int argc, char *argv[]) {
 	gettimeofday(&end, NULL);
 	fprintf(stderr, "done\n");
 	if (do_print) {
-		binmat_print_matrix_slow(stdout, final, n);
+		binmat_print_matrix_slow(stderr, final, n);
 		fprintf(stderr, "\n");
 	}
 	timersub(&end, &start, &diff);
