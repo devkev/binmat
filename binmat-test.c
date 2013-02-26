@@ -23,7 +23,7 @@
 
 
 
-void init_trad(TRAD *output, const binmat_data_t *input, binmat_index_t n) {
+void trad_init(TRAD *output, const binmat_data_t *input, binmat_index_t n) {
 	binmat_index_t row;
 	binmat_index_t col;
 
@@ -34,7 +34,7 @@ void init_trad(TRAD *output, const binmat_data_t *input, binmat_index_t n) {
 	}
 }
 
-void print_trad_binary(FILE *f, const TRAD *m, binmat_index_t n) {
+void trad_print_binary(FILE *f, const TRAD *m, binmat_index_t n) {
 	binmat_index_t row;
 	binmat_index_t col;
 
@@ -46,7 +46,7 @@ void print_trad_binary(FILE *f, const TRAD *m, binmat_index_t n) {
 	}
 }
 
-void print_trad(FILE *f, const TRAD *m, binmat_index_t n) {
+void trad_print(FILE *f, const TRAD *m, binmat_index_t n) {
 	binmat_index_t row;
 	binmat_index_t col;
 
@@ -62,7 +62,7 @@ void print_trad(FILE *f, const TRAD *m, binmat_index_t n) {
 	}
 }
 
-int are_identical_trad(const binmat_data_t *a, const TRAD *b, binmat_index_t n) {
+int trad_are_identical(const binmat_data_t *a, const TRAD *b, binmat_index_t n) {
 	binmat_index_t row;
 	binmat_index_t col;
 
@@ -76,11 +76,11 @@ int are_identical_trad(const binmat_data_t *a, const TRAD *b, binmat_index_t n) 
 	return 1;
 }
 
-void copy_trad(TRAD *a, const TRAD *b, binmat_index_t n) {
+void trad_copy(TRAD *a, const TRAD *b, binmat_index_t n) {
 	memcpy(a, b, n*n*sizeof(TRAD));
 }
 
-void transpose_trad(TRAD *output, const TRAD *input, binmat_index_t n) {
+void trad_transpose(TRAD *output, const TRAD *input, binmat_index_t n) {
 	binmat_index_t row;
 	binmat_index_t col;
 	TRAD *input_copy = NULL;
@@ -90,7 +90,7 @@ void transpose_trad(TRAD *output, const TRAD *input, binmat_index_t n) {
 	if (input == output) {
 		//binmat_dprintf("binmat_transpose: In place transposition, using temporary matrix\n");
 		input_copy = malloc(sizeof(TRAD) * n * n);
-		copy_trad(input_copy, input, n);
+		trad_copy(input_copy, input, n);
 		real_input = input_copy;
 	} else {
 		real_input = input;
@@ -105,7 +105,7 @@ void transpose_trad(TRAD *output, const TRAD *input, binmat_index_t n) {
 	free(input_copy);
 }
 
-int are_identical_trad_pure(const TRAD *a, const TRAD *b, binmat_index_t n) {
+int trad_are_identical_pure(const TRAD *a, const TRAD *b, binmat_index_t n) {
 	binmat_index_t row;
 	binmat_index_t col;
 
@@ -119,7 +119,7 @@ int are_identical_trad_pure(const TRAD *a, const TRAD *b, binmat_index_t n) {
 	return 1;
 }
 
-void multiply_trad(TRAD *output, const TRAD *a, const TRAD *b, binmat_index_t n) {
+void trad_multiply(TRAD *output, const TRAD *a, const TRAD *b, binmat_index_t n) {
 	binmat_index_t row;
 	binmat_index_t col;
 	binmat_index_t k;
@@ -136,7 +136,7 @@ void multiply_trad(TRAD *output, const TRAD *a, const TRAD *b, binmat_index_t n)
 	}
 }
 
-void power_trad(TRAD *output, const TRAD *a, binmat_index_t n, unsigned int pow) {
+void trad_power(TRAD *output, const TRAD *a, binmat_index_t n, unsigned int pow) {
 	unsigned int i;
 	TRAD *temp = malloc(sizeof(TRAD) * n * n);
 
@@ -145,10 +145,10 @@ void power_trad(TRAD *output, const TRAD *a, binmat_index_t n, unsigned int pow)
 	} else if (pow == 1) {
 		// copy it
 	} else {
-		multiply_trad(output, a, a, n);
+		trad_multiply(output, a, a, n);
 		for (i = 2; i < pow; i++) {
-			multiply_trad(temp, output, a, n);
-			copy_trad(output, temp, n);
+			trad_multiply(temp, output, a, n);
+			trad_copy(output, temp, n);
 		}
 	}
 	free(temp);
@@ -483,72 +483,72 @@ int main(int argc, char *argv[]) {
 
 	if (do_trad) {
 		fprintf(stderr, "Trad Input: ");
-		init_trad(tinput, input, n);
-		fprintf(stderr, "%s\n", check(are_identical_trad(input, tinput, n)));
+		trad_init(tinput, input, n);
+		fprintf(stderr, "%s\n", check(trad_are_identical(input, tinput, n)));
 		if (do_print) {
-			print_trad_binary(stderr, tinput, n);
+			trad_print_binary(stderr, tinput, n);
 			fprintf(stderr, "\n");
-			//print_trad(stderr, ttrans, n);
+			//trad_print(stderr, ttrans, n);
 			//fprintf(stderr, "\n");
 		}
 
 		fprintf(stderr, "Trad Trans: ");
-		transpose_trad(ttrans, tinput, n);
-		fprintf(stderr, "%s\n", check(are_identical_trad(trans, ttrans, n)));
+		trad_transpose(ttrans, tinput, n);
+		fprintf(stderr, "%s\n", check(trad_are_identical(trans, ttrans, n)));
 		if (do_print) {
-			print_trad_binary(stderr, ttrans, n);
+			trad_print_binary(stderr, ttrans, n);
 			fprintf(stderr, "\n");
 		}
 
 		fprintf(stderr, "Trad Transcheck: ");
-		transpose_trad(ttranscheck, ttrans, n);
-		fprintf(stderr, "%s %s\n", check(are_identical_trad(transcheck, ttranscheck, n)), check(are_identical_trad_pure(tinput, ttranscheck, n)));
+		trad_transpose(ttranscheck, ttrans, n);
+		fprintf(stderr, "%s %s\n", check(trad_are_identical(transcheck, ttranscheck, n)), check(trad_are_identical_pure(tinput, ttranscheck, n)));
 		if (do_print) {
-			print_trad_binary(stderr, ttranscheck, n);
+			trad_print_binary(stderr, ttranscheck, n);
 			fprintf(stderr, "\n");
 		}
 
 		fprintf(stderr, "Trad Multiply: ");
-		multiply_trad(toutput, tinput, tinput, n);
-		fprintf(stderr, "%s\n", check(are_identical_trad(output, toutput, n)));
+		trad_multiply(toutput, tinput, tinput, n);
+		fprintf(stderr, "%s\n", check(trad_are_identical(output, toutput, n)));
 		if (do_print) {
-			print_trad_binary(stderr, toutput, n);
+			trad_print_binary(stderr, toutput, n);
 			fprintf(stderr, "\n");
 		}
 
 		fprintf(stderr, "Trad Multiply (2): ");
-		multiply_trad(ttemp, toutput, tinput, n);
-		copy_trad(toutput, ttemp, n);
+		trad_multiply(ttemp, toutput, tinput, n);
+		trad_copy(toutput, ttemp, n);
 		fprintf(stderr, "done\n");
 		if (do_print) {
-			print_trad_binary(stderr, toutput, n);
+			trad_print_binary(stderr, toutput, n);
 			fprintf(stderr, "\n");
 		}
 
 		fprintf(stderr, "Trad Power (3): ");
-		power_trad(tfinal, tinput, n, 3);
-		fprintf(stderr, "%s\n", check(are_identical_trad_pure(toutput, tfinal, n)));
+		trad_power(tfinal, tinput, n, 3);
+		fprintf(stderr, "%s\n", check(trad_are_identical_pure(toutput, tfinal, n)));
 		if (do_print) {
-			print_trad(stderr, tfinal, n);
+			trad_print(stderr, tfinal, n);
 			fprintf(stderr, "\n");
 		}
 
 
 		fprintf(stderr, "Trad Power (%u) (%u warmups): ", p, warmups_trad);
 		for (rep = 0; rep < warmups_trad; rep++) {
-			power_trad(tfinal, tinput, n, p);
+			trad_power(tfinal, tinput, n, p);
 		}
 		fprintf(stderr, "done\n");
 		fprintf(stderr, "Trad Power (%u) (%u reps): ", p, reps_trad);
 		gettimeofday(&start, NULL);
 		for (rep = 0; rep < reps_trad; rep++) {
-			power_trad(tfinal, tinput, n, p);
+			trad_power(tfinal, tinput, n, p);
 		}
 		gettimeofday(&end, NULL);
-		fprintf(stderr, "%s\n", check(are_identical_trad(final, tfinal, n)));
+		fprintf(stderr, "%s\n", check(trad_are_identical(final, tfinal, n)));
 		timersub(&end, &start, &diff_trad);
 		if (do_print) {
-			print_trad_binary(stderr, tfinal, n);
+			trad_print_binary(stderr, tfinal, n);
 			fprintf(stderr, "\n");
 		}
 
