@@ -231,6 +231,16 @@ int b_arg(int argc, char *argv[], int *i, const char *arg, int *result, int inve
 }
 
 
+static int warnings = 0;
+
+const char *check(int result) {
+	if (!result) {
+		warnings++;
+	}
+	return result ? "Identical" : "DIFFERENT!";
+}
+
+
 int main(int argc, char *argv[]) {
 	binmat_index_t n = 0;
 
@@ -425,7 +435,7 @@ int main(int argc, char *argv[]) {
 	// check trans
 	printf("Transcheck: ");
 	binmat_transpose(transcheck, trans, n);
-	printf("%s\n", binmat_are_identical(input, transcheck, n) ? "Identical" : "DIFFERENT!");
+	printf("%s\n", check(binmat_are_identical(input, transcheck, n)));
 	if (do_print) {
 		binmat_print_matrix_slow(stdout, transcheck, n);
 		printf("\n");
@@ -444,7 +454,7 @@ int main(int argc, char *argv[]) {
 
 	printf("Multiply: ");
 	binmat_multiply(output, input, trans, n);
-	printf("%s\n", binmat_are_identical(output, output_slow, n) ? "Identical" : "DIFFERENT!");
+	printf("%s\n", check(binmat_are_identical(output, output_slow, n)));
 	if (do_print) {
 		binmat_print_matrix_slow(stdout, output, n);
 		printf("\n");
@@ -474,7 +484,7 @@ int main(int argc, char *argv[]) {
 	if (do_trad) {
 		printf("Trad Input: ");
 		init_trad(tinput, input, n);
-		printf("%s\n", are_identical_trad(input, tinput, n) ? "Identical" : "DIFFERENT!");
+		printf("%s\n", check(are_identical_trad(input, tinput, n)));
 		if (do_print) {
 			print_trad_binary(tinput, n);
 			printf("\n");
@@ -484,7 +494,7 @@ int main(int argc, char *argv[]) {
 
 		printf("Trad Trans: ");
 		transpose_trad(ttrans, tinput, n);
-		printf("%s\n", are_identical_trad(trans, ttrans, n) ? "Identical" : "DIFFERENT!");
+		printf("%s\n", check(are_identical_trad(trans, ttrans, n)));
 		if (do_print) {
 			print_trad_binary(ttrans, n);
 			printf("\n");
@@ -492,7 +502,7 @@ int main(int argc, char *argv[]) {
 
 		printf("Trad Transcheck: ");
 		transpose_trad(ttranscheck, ttrans, n);
-		printf("%s %s\n", are_identical_trad(transcheck, ttranscheck, n) ? "Identical" : "DIFFERENT!", are_identical_trad_pure(tinput, ttranscheck, n) ? "Identical" : "DIFFERENT!");
+		printf("%s %s\n", check(are_identical_trad(transcheck, ttranscheck, n)), check(are_identical_trad_pure(tinput, ttranscheck, n)));
 		if (do_print) {
 			print_trad_binary(ttranscheck, n);
 			printf("\n");
@@ -500,7 +510,7 @@ int main(int argc, char *argv[]) {
 
 		printf("Trad Multiply: ");
 		multiply_trad(toutput, tinput, tinput, n);
-		printf("%s\n", are_identical_trad(output, toutput, n) ? "Identical" : "DIFFERENT!");
+		printf("%s\n", check(are_identical_trad(output, toutput, n)));
 		if (do_print) {
 			print_trad_binary(toutput, n);
 			printf("\n");
@@ -517,7 +527,7 @@ int main(int argc, char *argv[]) {
 
 		printf("Trad Power (3): ");
 		power_trad(tfinal, tinput, n, 3);
-		printf("%s\n", are_identical_trad_pure(toutput, tfinal, n) ? "Identical" : "DIFFERENT!");
+		printf("%s\n", check(are_identical_trad_pure(toutput, tfinal, n)));
 		if (do_print) {
 			print_trad(tfinal, n);
 			printf("\n");
@@ -535,7 +545,7 @@ int main(int argc, char *argv[]) {
 			power_trad(tfinal, tinput, n, p);
 		}
 		gettimeofday(&end, NULL);
-		printf("%s\n", are_identical_trad(final, tfinal, n) ? "Identical" : "DIFFERENT!");
+		printf("%s\n", check(are_identical_trad(final, tfinal, n)));
 		timersub(&end, &start, &diff_trad);
 		if (do_print) {
 			print_trad_binary(tfinal, n);
@@ -547,6 +557,14 @@ int main(int argc, char *argv[]) {
 	}
 
 
+
+	if (warnings) {
+		printf("\n");
+		printf("!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!\n");
+		printf("   %d CHECK%s GAVE DIFFERENT RESULTS!\n", warnings, (warnings > 1 ? "S" : ""));
+		printf("!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!\n");
+		printf("\n");
+	}
 
 	fprintf(stderr, "binmat-test: freeing binmats...\n");
 	binmat_free(input);
