@@ -66,7 +66,6 @@ int binmat_dprintf(const char *format, ...) {
 binmat_data_t *binmat_alloc(binmat_index_t n) {
 	binmat_data_t *m = NULL;
 	binmat_dprintf("binmat_alloc: Allocating matrix size %lu bits (nmemb = %lu, size = %lu)... ", n, n * binmat_numchunks(n), binmat_chunkbytes);
-	//m = malloc(binmat_numbytes(n));
 	// Just in case (particularly when n is not a multiple of binmat_chunkbits)
 	m = calloc(n * binmat_numchunks(n), binmat_chunkbytes);
 	binmat_dprintf("at %p\n", m);

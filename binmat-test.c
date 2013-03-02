@@ -395,7 +395,7 @@ int main(int argc, char *argv[]) {
 	fprintf(stderr, "\n");
 
 
-	megs_per_matrix = (double)(binmat_numbytes(n))/1048576.0;
+	megs_per_matrix = (double)(binmat_numbytes_matrix(n))/1048576.0;
 	megs_total = 6 * megs_per_matrix;
 	fprintf(stderr, "Size: %lf MiB per matrix, %lf MiB total\n", megs_per_matrix, megs_total);
 
@@ -416,10 +416,10 @@ int main(int argc, char *argv[]) {
 	fprintf(stderr, "done\n");
 
 	fprintf(stderr, "Memsetting: ");
-	memset(input, 0xF8, binmat_numbytes(n));
-	memset(trans, 0xF9, binmat_numbytes(n));
-	memset(output, 0xFA, binmat_numbytes(n));
-	memset(final, 0xFB, binmat_numbytes(n));
+	memset(input, 0xF8, binmat_numbytes_matrix(n));
+	memset(trans, 0xF9, binmat_numbytes_matrix(n));
+	memset(output, 0xFA, binmat_numbytes_matrix(n));
+	memset(final, 0xFB, binmat_numbytes_matrix(n));
 	fprintf(stderr, "done\n");
 
 	if (do_trad) {

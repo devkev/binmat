@@ -47,7 +47,9 @@ typedef unsigned char binmat_bool_t;
 #define binmat_chunkbytes (sizeof(binmat_data_t))
 #define binmat_chunkbits (binmat_chunkbytes*8)
 #define binmat_numchunks(n) ( ((n)%binmat_chunkbits==0) ? (n)/binmat_chunkbits : (n)/binmat_chunkbits + 1 )
-#define binmat_numbytes(n) ((n) * binmat_numchunks(n) * binmat_chunkbytes)
+#define binmat_numbytes(n) (binmat_numchunks(n) * binmat_chunkbytes)
+#define binmat_numbits(n) (binmat_numchunks(n) * binmat_chunkbits)
+#define binmat_numbytes_matrix(n) ((n) * binmat_numbytes(n))
 #define binmat_finalchunkbits(n) ( ((n)%binmat_chunkbits==0) ? binmat_chunkbits : (n)%binmat_chunkbits )
 #define binmat_finalchunkmask(n) ( ((n)%binmat_chunkbits==0) ? ((binmat_data_t)(zero - 1)) : ((one << binmat_finalchunkbits(n)) - 1) )
 
