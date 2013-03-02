@@ -192,6 +192,14 @@ int binmat_are_identical(const binmat_data_t *a, const binmat_data_t *b, binmat_
 	binmat_index_t row;
 	binmat_index_t col;
 
+	// Depending on the size of the matrices involved, and the depth of
+	// pipelining on the arch we're running on (since conditional branching
+	// destroys pipelining gains), it may be faster to just XOR the entire
+	// matrices (with final masks) together, ORing against a "running result"
+	// as we go.  The NOT of the running result is then the final result.  So
+	// this way no conditionals or comparisons are required, and it amounts to
+	// just streaming through memory doing fast bitwise operations.
+
 	binmat_dprintf("binmat_are_identical: Checking matrices at %p and %p, size %lu\n", a, b, n);
 	for (row = 0; row < n; row++) {
 		for (col = 0; col < binmat_numchunks(n) - 1; col++) {
